@@ -271,5 +271,57 @@ export const createDynamicStyles = (theme) => {
     flex1: {
       flex: 1,
     },
+    // Cards com barra lateral colorida
+    cardWithStatus: {
+      backgroundColor: colors.card,
+      borderRadius: 12,
+      padding: 16,
+      marginBottom: 16,
+      marginHorizontal: 16,
+      borderWidth: 1,
+      borderColor: colors.border,
+      shadowColor: theme.isDarkMode ? '#000' : '#000',
+      shadowOffset: {
+        width: 0,
+        height: 2,
+      },
+      shadowOpacity: theme.isDarkMode ? 0.3 : 0.1,
+      shadowRadius: 3.84,
+      elevation: 5,
+      position: 'relative',
+    },
+    cardStatusBar: {
+      position: 'absolute',
+      left: 0,
+      top: 0,
+      bottom: 0,
+      width: 4,
+      borderTopLeftRadius: 12,
+      borderBottomLeftRadius: 12,
+    },
+    cardStatusBarPending: {
+      backgroundColor: '#FFD700',
+    },
+    cardStatusBarAccepted: {
+      backgroundColor: '#1ecb4f',
+    },
+    cardStatusBarPicked: {
+      backgroundColor: '#FF6B35',
+    },
+    cardStatusBarDelivered: {
+      backgroundColor: '#1ecb4f',
+    },
+    cardStatusBarOperational: {
+      backgroundColor: '#1ecb4f',
+    },
+    cardStatusBarWarning: {
+      backgroundColor: '#FFD700',
+    },
+    cardStatusBarError: {
+      backgroundColor: '#FF4500',
+    },
+    cardStatusBarInfo: {
+      backgroundColor: '#2196F3',
+    },
   });
 };

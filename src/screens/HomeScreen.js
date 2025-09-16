@@ -8,6 +8,7 @@ import {
 import { useTheme } from '../contexts/ThemeContext';
 import { createDynamicStyles } from '../styles/dynamicStyles';
 import SafeAreaWrapper from '../components/SafeAreaWrapper';
+import StatusCard from '../components/StatusCard';
 
 const HomeScreen = ({ navigation }) => {
   const theme = useTheme();
@@ -207,9 +208,11 @@ const HomeScreen = ({ navigation }) => {
         </View>
 
         {/* Status do Sistema */}
-        <View style={styles.card}>
-          <Text style={styles.cardTitle}>Status do Sistema</Text>
-          <Text style={styles.cardSubtitle}>Motoboys disponíveis próximos</Text>
+        <StatusCard 
+          status="operational"
+          title="Status do Sistema"
+          subtitle="Motoboys disponíveis próximos"
+        >
           <View style={[styles.row, styles.spaceBetween, { marginTop: 16, flexWrap: 'wrap' }]}>
             <View style={{ minWidth: '30%', marginBottom: 12 }}>
               <Text style={styles.textSecondary}>Motoboys Online</Text>
@@ -226,12 +229,15 @@ const HomeScreen = ({ navigation }) => {
               </View>
             </View>
           </View>
-        </View>
+        </StatusCard>
 
         {/* Entregas Ativas */}
-        <View style={styles.card}>
+        <StatusCard 
+          status="info"
+          title="Entregas Ativas"
+        >
           <View style={styles.cardHeader}>
-            <Text style={styles.cardTitle}>Entregas Ativas</Text>
+            <View style={{ flex: 1 }} />
             <TouchableOpacity onPress={() => navigation.navigate('Entregas', { 
               screen: 'EntregasList',
               params: { initialTab: 'ativas' }
@@ -285,11 +291,13 @@ const HomeScreen = ({ navigation }) => {
               </Text>
             </TouchableOpacity>
           )}
-        </View>
+        </StatusCard>
 
         {/* Ações Rápidas */}
-        <View style={styles.card}>
-          <Text style={styles.cardTitle}>Ações Rápidas</Text>
+        <StatusCard 
+          status="info"
+          title="Ações Rápidas"
+        >
           <View style={[styles.row, styles.spaceBetween, { marginTop: 16 }]}>
             <TouchableOpacity style={[styles.button, { flex: 1, marginRight: 8 }]}>
               <Text style={styles.buttonText}>📦 Nova Entrega</Text>
@@ -298,7 +306,7 @@ const HomeScreen = ({ navigation }) => {
               <Text style={styles.buttonSecondaryText}>📊 Relatórios</Text>
             </TouchableOpacity>
           </View>
-        </View>
+        </StatusCard>
       </ScrollView>
     </SafeAreaWrapper>
   );

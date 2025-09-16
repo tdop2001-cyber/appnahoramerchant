@@ -9,6 +9,7 @@ import {
 import { useTheme } from '../contexts/ThemeContext';
 import { createDynamicStyles } from '../styles/dynamicStyles';
 import SafeAreaWrapper from '../components/SafeAreaWrapper';
+import StatusCard from '../components/StatusCard';
 
 const EntregasScreen = ({ navigation, route }) => {
   const theme = useTheme();
