@@ -178,17 +178,9 @@ const EditarCategoriaScreen = ({ navigation, route }) => {
               Nome da Categoria *
             </Text>
             <TextInput
-              style={{
-                backgroundColor: '#333333',
-                borderRadius: 8,
-                padding: 12,
-                color: '#ffffff',
-                fontSize: 16,
-                borderWidth: 1,
-                borderColor: '#555555',
-              }}
+              style={styles.input}
               placeholder="Ex: Pizzas, Hambúrgueres, Bebidas"
-              placeholderTextColor="#999999"
+              placeholderTextColor={colors.textSecondary}
               value={formData.nome}
               onChangeText={(value) => handleInputChange('nome', value)}
             />
@@ -200,19 +192,9 @@ const EditarCategoriaScreen = ({ navigation, route }) => {
               Descrição *
             </Text>
             <TextInput
-              style={{
-                backgroundColor: '#333333',
-                borderRadius: 8,
-                padding: 12,
-                color: '#ffffff',
-                fontSize: 16,
-                borderWidth: 1,
-                borderColor: '#555555',
-                height: 80,
-                textAlignVertical: 'top',
-              }}
+              style={[styles.input, { height: 80, textAlignVertical: 'top' }]}
               placeholder="Descreva o que esta categoria representa"
-              placeholderTextColor="#999999"
+              placeholderTextColor={colors.textSecondary}
               value={formData.descricao}
               onChangeText={(value) => handleInputChange('descricao', value)}
               multiline
@@ -232,13 +214,13 @@ const EditarCategoriaScreen = ({ navigation, route }) => {
                 key={emoji}
                 style={[
                   {
-                    backgroundColor: formData.emoji === emoji ? '#FF7300' : '#333333',
+                    backgroundColor: formData.emoji === emoji ? colors.primary : colors.surface,
                     borderRadius: 8,
                     padding: 12,
                     marginRight: 8,
                     marginBottom: 8,
                     borderWidth: 1,
-                    borderColor: formData.emoji === emoji ? '#FF7300' : '#555555',
+                    borderColor: formData.emoji === emoji ? colors.primary : colors.border,
                   }
                 ]}
                 onPress={() => handleEmojiSelect(emoji)}

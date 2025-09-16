@@ -8,9 +8,14 @@ import {
   TextInput,
   Alert,
 } from 'react-native';
-import styles from '../styles/styles';
+import { useTheme } from '../contexts/ThemeContext';
+import { createDynamicStyles } from '../styles/dynamicStyles';
 
 const CriarProdutoScreen = ({ navigation }) => {
+  const theme = useTheme();
+  const styles = createDynamicStyles(theme);
+  const colors = theme.colors[theme.isDarkMode ? 'dark' : 'light'];
+  
   const [formData, setFormData] = useState({
     nome: '',
     descricao: '',
@@ -122,17 +127,9 @@ const CriarProdutoScreen = ({ navigation }) => {
               Nome do Produto *
             </Text>
             <TextInput
-              style={{
-                backgroundColor: '#333333',
-                borderRadius: 8,
-                padding: 12,
-                color: '#ffffff',
-                fontSize: 16,
-                borderWidth: 1,
-                borderColor: '#555555',
-              }}
+              style={styles.input}
               placeholder="Ex: Pizza Margherita"
-              placeholderTextColor="#999999"
+              placeholderTextColor={colors.textSecondary}
               value={formData.nome}
               onChangeText={(value) => handleInputChange('nome', value)}
             />
@@ -144,19 +141,9 @@ const CriarProdutoScreen = ({ navigation }) => {
               Descrição *
             </Text>
             <TextInput
-              style={{
-                backgroundColor: '#333333',
-                borderRadius: 8,
-                padding: 12,
-                color: '#ffffff',
-                fontSize: 16,
-                borderWidth: 1,
-                borderColor: '#555555',
-                height: 80,
-                textAlignVertical: 'top',
-              }}
+              style={[styles.input, { height: 80, textAlignVertical: 'top' }]}
               placeholder="Descreva os ingredientes e características do produto"
-              placeholderTextColor="#999999"
+              placeholderTextColor={colors.textSecondary}
               value={formData.descricao}
               onChangeText={(value) => handleInputChange('descricao', value)}
               multiline
@@ -169,17 +156,9 @@ const CriarProdutoScreen = ({ navigation }) => {
               Preço *
             </Text>
             <TextInput
-              style={{
-                backgroundColor: '#333333',
-                borderRadius: 8,
-                padding: 12,
-                color: '#ffffff',
-                fontSize: 16,
-                borderWidth: 1,
-                borderColor: '#555555',
-              }}
+              style={styles.input}
               placeholder="Ex: 25,90"
-              placeholderTextColor="#999999"
+              placeholderTextColor={colors.textSecondary}
               value={formData.preco}
               onChangeText={(value) => handleInputChange('preco', value)}
               keyboardType="numeric"
@@ -228,13 +207,13 @@ const CriarProdutoScreen = ({ navigation }) => {
                 key={emoji}
                 style={[
                   {
-                    backgroundColor: formData.emoji === emoji ? '#FF7300' : '#333333',
+                    backgroundColor: formData.emoji === emoji ? colors.primary : colors.surface,
                     borderRadius: 8,
                     padding: 12,
                     marginRight: 8,
                     marginBottom: 8,
                     borderWidth: 1,
-                    borderColor: formData.emoji === emoji ? '#FF7300' : '#555555',
+                    borderColor: formData.emoji === emoji ? colors.primary : colors.border,
                   }
                 ]}
                 onPress={() => handleEmojiSelect(emoji)}

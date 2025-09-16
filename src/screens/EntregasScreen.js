@@ -1,19 +1,32 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   ScrollView,
   Text,
   TouchableOpacity,
-  SafeAreaView,
   TextInput,
 } from 'react-native';
-import styles from '../styles/styles';
+import { useTheme } from '../contexts/ThemeContext';
+import { createDynamicStyles } from '../styles/dynamicStyles';
+import SafeAreaWrapper from '../components/SafeAreaWrapper';
 
-const EntregasScreen = ({ navigation }) => {
-  const [activeTab, setActiveTab] = useState('ativas');
+const EntregasScreen = ({ navigation, route }) => {
+  const theme = useTheme();
+  const styles = createDynamicStyles(theme);
+  const colors = theme.colors[theme.isDarkMode ? 'dark' : 'light'];
+  
+  const { initialTab = 'ativas' } = route.params || {};
+  const [activeTab, setActiveTab] = useState(initialTab);
   const [searchText, setSearchText] = useState('');
 
-  const [entregasAtivas] = useState([
+  // Atualizar aba ativa quando o parâmetro mudar
+  useEffect(() => {
+    if (initialTab) {
+      setActiveTab(initialTab);
+    }
+  }, [initialTab]);
+
+  const [entregasAtivas, setEntregasAtivas] = useState([
     {
       id: '47321',
       cliente: 'Maria Silva',
@@ -124,10 +137,21 @@ const EntregasScreen = ({ navigation }) => {
     }
   };
 
+  const atualizarStatusEntrega = (entregaId, novoStatus) => {
+    setEntregasAtivas(prevEntregas => 
+      prevEntregas.map(entrega => 
+        entrega.id === entregaId 
+          ? { ...entrega, status: novoStatus }
+          : entrega
+      )
+    );
+  };
+
+
   const currentEntregas = activeTab === 'ativas' ? entregasAtivas : entregasHistorico;
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaWrapper>
       {/* Header */}
       <View style={styles.header}>
         <Text style={styles.headerTitle}>Entregas</Text>
@@ -246,16 +270,19 @@ const EntregasScreen = ({ navigation }) => {
                 </View>
               </View>
 
-              <View style={[styles.row, styles.spaceBetween, { marginTop: 16 }]}>
+              <View style={[styles.row, { marginTop: 16, gap: 8 }]}>
                 <TouchableOpacity 
-                  style={[styles.button, { flex: 1, marginRight: 8 }]}
+                  style={[styles.button, { flex: 1 }]}
                   onPress={() => navigation.navigate('EntregaDetalhes', { entrega })}
                 >
-                  <Text style={styles.buttonText}>👁️ Ver Detalhes</Text>
+                  <Text style={styles.buttonText} numberOfLines={1}>📋 Detalhes</Text>
                 </TouchableOpacity>
                 {activeTab === 'ativas' && (
-                  <TouchableOpacity style={[styles.button, styles.buttonSecondary, { flex: 1, marginLeft: 8 }]}>
-                    <Text style={styles.buttonSecondaryText}>📍 Rastrear</Text>
+                  <TouchableOpacity 
+                    style={[styles.button, styles.buttonSecondary, { flex: 1 }]}
+                    onPress={() => console.log('Funcionalidade de rastreamento será implementada em breve!')}
+                  >
+                    <Text style={styles.buttonSecondaryText} numberOfLines={1}>📍 Rastrear</Text>
                   </TouchableOpacity>
                 )}
               </View>
@@ -263,7 +290,7 @@ const EntregasScreen = ({ navigation }) => {
           ))
         )}
       </ScrollView>
-    </SafeAreaView>
+    </SafeAreaWrapper>
   );
 };
 

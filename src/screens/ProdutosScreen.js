@@ -4,12 +4,17 @@ import {
   ScrollView,
   Text,
   TouchableOpacity,
-  SafeAreaView,
   TextInput,
 } from 'react-native';
-import styles from '../styles/styles';
+import { useTheme } from '../contexts/ThemeContext';
+import { createDynamicStyles } from '../styles/dynamicStyles';
+import SafeAreaWrapper from '../components/SafeAreaWrapper';
 
 const ProdutosScreen = ({ navigation }) => {
+  const theme = useTheme();
+  const styles = createDynamicStyles(theme);
+  const colors = theme.colors[theme.isDarkMode ? 'dark' : 'light'];
+  
   const [searchText, setSearchText] = useState('');
   const [activeCategory, setActiveCategory] = useState('todos');
 
@@ -86,7 +91,7 @@ const ProdutosScreen = ({ navigation }) => {
   });
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaWrapper>
       <ScrollView 
         style={{ flex: 1 }}
         contentContainerStyle={{ paddingBottom: 100 }}
@@ -103,7 +108,7 @@ const ProdutosScreen = ({ navigation }) => {
             style={[styles.button, { flex: 1, marginRight: 8 }]}
             onPress={() => navigation.navigate('CriarProduto')}
           >
-            <Text style={styles.buttonText}>➕ Adicionar Produto</Text>
+            <Text style={styles.buttonText}>➕ Novo Produto</Text>
           </TouchableOpacity>
           <TouchableOpacity 
             style={[styles.button, styles.buttonSecondary, { flex: 1, marginLeft: 8 }]}
@@ -117,15 +122,9 @@ const ProdutosScreen = ({ navigation }) => {
         {/* Busca */}
         <View style={[styles.card, { marginBottom: 16 }]}>
           <TextInput
-            style={{
-              backgroundColor: '#333333',
-              borderRadius: 8,
-              padding: 12,
-              color: '#ffffff',
-              fontSize: 16,
-            }}
+            style={styles.input}
             placeholder="Buscar produtos..."
-            placeholderTextColor="#999999"
+            placeholderTextColor={colors.textSecondary}
             value={searchText}
             onChangeText={setSearchText}
           />
@@ -162,18 +161,18 @@ const ProdutosScreen = ({ navigation }) => {
         </View>
 
         {/* Estatísticas */}
-        <View style={[styles.statsContainer, { flexWrap: 'wrap' }]}>
-          <View style={[styles.statCard, { width: '30%', marginBottom: 8 }]}>
+        <View style={[styles.statsContainer, { flexDirection: 'row', justifyContent: 'space-between' }]}>
+          <View style={[styles.statCard, { flex: 1, marginRight: 8 }]}>
             <Text style={styles.statValue}>{produtos.length}</Text>
             <Text style={styles.statLabel}>Total de Produtos</Text>
           </View>
-          <View style={[styles.statCard, { width: '30%', marginBottom: 8 }]}>
+          <View style={[styles.statCard, { flex: 1, marginHorizontal: 4 }]}>
             <Text style={styles.statValue}>
               {produtos.filter(p => p.disponivel).length}
             </Text>
             <Text style={styles.statLabel}>Disponíveis</Text>
           </View>
-          <View style={[styles.statCard, { width: '30%', marginBottom: 8 }]}>
+          <View style={[styles.statCard, { flex: 1, marginLeft: 8 }]}>
             <Text style={styles.statValue}>
               {produtos.filter(p => !p.disponivel).length}
             </Text>
@@ -261,7 +260,7 @@ const ProdutosScreen = ({ navigation }) => {
           ))
         )}
       </ScrollView>
-    </SafeAreaView>
+    </SafeAreaWrapper>
   );
 };
 

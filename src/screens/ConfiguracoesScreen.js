@@ -4,17 +4,21 @@ import {
   ScrollView,
   Text,
   TouchableOpacity,
-  SafeAreaView,
   Switch,
   Alert,
 } from 'react-native';
-import styles from '../styles/styles';
+import { useTheme } from '../contexts/ThemeContext';
+import { createDynamicStyles } from '../styles/dynamicStyles';
+import SafeAreaWrapper from '../components/SafeAreaWrapper';
 
-const ConfiguracoesScreen = () => {
+const ConfiguracoesScreen = ({ navigation }) => {
+  const theme = useTheme();
+  const styles = createDynamicStyles(theme);
+  const colors = theme.colors[theme.isDarkMode ? 'dark' : 'light'];
+  
   const [notificacoes, setNotificacoes] = useState(true);
   const [som, setSom] = useState(true);
   const [vibracao, setVibracao] = useState(true);
-  const [modoEscuro, setModoEscuro] = useState(true);
 
   const [restauranteInfo] = useState({
     nome: 'Restaurante Sabor & Arte',
@@ -47,7 +51,7 @@ const ConfiguracoesScreen = () => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaWrapper>
       {/* Header */}
       <View style={styles.header}>
         <Text style={styles.headerTitle}>Configurações</Text>
@@ -84,7 +88,10 @@ const ConfiguracoesScreen = () => {
               <Text style={styles.text}>{restauranteInfo.cnpj}</Text>
             </View>
           </View>
-          <TouchableOpacity style={[styles.button, { marginTop: 16 }]}>
+          <TouchableOpacity 
+            style={[styles.button, { marginTop: 16 }]}
+            onPress={() => navigation.navigate('InformacoesRestaurante')}
+          >
             <Text style={styles.buttonText}>✏️ Editar Informações</Text>
           </TouchableOpacity>
         </View>
@@ -103,8 +110,9 @@ const ConfiguracoesScreen = () => {
               <Switch
                 value={notificacoes}
                 onValueChange={setNotificacoes}
-                trackColor={{ false: '#333333', true: '#FF7300' }}
-                thumbColor={notificacoes ? '#ffffff' : '#999999'}
+                trackColor={{ false: colors.secondary, true: colors.primary }}
+                thumbColor={notificacoes ? colors.primaryText : colors.textSecondary}
+                style={styles.toggleSwitch}
               />
             </View>
             <View style={[styles.row, styles.spaceBetween, { marginBottom: 16 }]}>
@@ -117,8 +125,9 @@ const ConfiguracoesScreen = () => {
               <Switch
                 value={som}
                 onValueChange={setSom}
-                trackColor={{ false: '#333333', true: '#FF7300' }}
-                thumbColor={som ? '#ffffff' : '#999999'}
+                trackColor={{ false: colors.secondary, true: colors.primary }}
+                thumbColor={som ? colors.primaryText : colors.textSecondary}
+                style={styles.toggleSwitch}
               />
             </View>
             <View style={[styles.row, styles.spaceBetween]}>
@@ -131,8 +140,9 @@ const ConfiguracoesScreen = () => {
               <Switch
                 value={vibracao}
                 onValueChange={setVibracao}
-                trackColor={{ false: '#333333', true: '#FF7300' }}
-                thumbColor={vibracao ? '#ffffff' : '#999999'}
+                trackColor={{ false: colors.secondary, true: colors.primary }}
+                thumbColor={vibracao ? colors.primaryText : colors.textSecondary}
+                style={styles.toggleSwitch}
               />
             </View>
           </View>
@@ -146,14 +156,15 @@ const ConfiguracoesScreen = () => {
               <View style={styles.flex1}>
                 <Text style={styles.text}>Modo Escuro</Text>
                 <Text style={styles.textSecondary}>
-                  Usar tema escuro (recomendado)
+                  {theme.isDarkMode ? 'Usar tema escuro (recomendado)' : 'Usar tema claro com dock laranja'}
                 </Text>
               </View>
               <Switch
-                value={modoEscuro}
-                onValueChange={setModoEscuro}
-                trackColor={{ false: '#333333', true: '#FF7300' }}
-                thumbColor={modoEscuro ? '#ffffff' : '#999999'}
+                value={theme.isDarkMode}
+                onValueChange={theme.toggleTheme}
+                trackColor={{ false: colors.secondary, true: colors.primary }}
+                thumbColor={theme.isDarkMode ? colors.primaryText : colors.textSecondary}
+                style={styles.toggleSwitch}
               />
             </View>
           </View>
@@ -163,7 +174,10 @@ const ConfiguracoesScreen = () => {
         <View style={styles.card}>
           <Text style={styles.cardTitle}>👤 Conta</Text>
           <View style={{ marginTop: 16 }}>
-            <TouchableOpacity style={[styles.row, styles.spaceBetween, { marginBottom: 16 }]}>
+            <TouchableOpacity 
+              style={[styles.row, styles.spaceBetween, { marginBottom: 16 }]}
+              onPress={() => navigation.navigate('AlterarSenha')}
+            >
               <View style={styles.row}>
                 <Text style={{ fontSize: 20, marginRight: 12 }}>🔒</Text>
                 <View>
@@ -174,7 +188,10 @@ const ConfiguracoesScreen = () => {
               <Text style={styles.textSecondary}>›</Text>
             </TouchableOpacity>
             
-            <TouchableOpacity style={[styles.row, styles.spaceBetween, { marginBottom: 16 }]}>
+            <TouchableOpacity 
+              style={[styles.row, styles.spaceBetween, { marginBottom: 16 }]}
+              onPress={() => navigation.navigate('MetodosPagamento')}
+            >
               <View style={styles.row}>
                 <Text style={{ fontSize: 20, marginRight: 12 }}>💳</Text>
                 <View>
@@ -185,7 +202,24 @@ const ConfiguracoesScreen = () => {
               <Text style={styles.textSecondary}>›</Text>
             </TouchableOpacity>
             
-            <TouchableOpacity style={[styles.row, styles.spaceBetween, { marginBottom: 16 }]}>
+            <TouchableOpacity 
+              style={[styles.row, styles.spaceBetween, { marginBottom: 16 }]}
+              onPress={() => navigation.navigate('EnderecosRetirada')}
+            >
+              <View style={styles.row}>
+                <Text style={{ fontSize: 20, marginRight: 12 }}>📍</Text>
+                <View>
+                  <Text style={styles.text}>Endereços de Retirada</Text>
+                  <Text style={styles.textSecondary}>Gerenciar endereços para coleta</Text>
+                </View>
+              </View>
+              <Text style={styles.textSecondary}>›</Text>
+            </TouchableOpacity>
+            
+            <TouchableOpacity 
+              style={[styles.row, styles.spaceBetween, { marginBottom: 16 }]}
+              onPress={() => navigation.navigate('Relatorios')}
+            >
               <View style={styles.row}>
                 <Text style={{ fontSize: 20, marginRight: 12 }}>📊</Text>
                 <View>
@@ -196,7 +230,10 @@ const ConfiguracoesScreen = () => {
               <Text style={styles.textSecondary}>›</Text>
             </TouchableOpacity>
             
-            <TouchableOpacity style={[styles.row, styles.spaceBetween]}>
+            <TouchableOpacity 
+              style={[styles.row, styles.spaceBetween]}
+              onPress={() => navigation.navigate('AjudaSuporte')}
+            >
               <View style={styles.row}>
                 <Text style={{ fontSize: 20, marginRight: 12 }}>❓</Text>
                 <View>
@@ -248,7 +285,7 @@ const ConfiguracoesScreen = () => {
           </View>
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </SafeAreaWrapper>
   );
 };
 

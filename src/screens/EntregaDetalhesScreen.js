@@ -4,16 +4,21 @@ import {
   ScrollView,
   Text,
   TouchableOpacity,
-  SafeAreaView,
   Alert,
   Linking,
 } from 'react-native';
-import styles from '../styles/styles';
+import { useTheme } from '../contexts/ThemeContext';
+import { createDynamicStyles } from '../styles/dynamicStyles';
+import SafeAreaWrapper from '../components/SafeAreaWrapper';
 
 const EntregaDetalhesScreen = ({ navigation, route }) => {
+  const theme = useTheme();
+  const styles = createDynamicStyles(theme);
+  const colors = theme.colors[theme.isDarkMode ? 'dark' : 'light'];
+  
   const { entrega } = route.params || {};
   
-  const [entregaData] = useState(entrega || {
+  const [entregaData, setEntregaData] = useState(entrega || {
     id: '47321',
     cliente: 'Maria Silva',
     telefone: '(11) 99999-9999',
@@ -130,11 +135,52 @@ const EntregaDetalhesScreen = ({ navigation, route }) => {
   };
 
   const handleAtualizarStatus = () => {
-    Alert.alert('Atualizar Status', 'Funcionalidade para atualizar status da entrega será implementada em breve!');
+    const statusOptions = [
+      { key: 'pending', label: 'Pendente', emoji: '⏳' },
+      { key: 'accepted', label: 'Aceito', emoji: '✅' },
+      { key: 'preparing', label: 'Preparando', emoji: '👨‍🍳' },
+      { key: 'picked', label: 'Coletado', emoji: '📦' },
+      { key: 'delivered', label: 'Entregue', emoji: '🎉' },
+    ];
+
+    Alert.alert(
+      'Atualizar Status',
+      'Selecione o novo status da entrega:',
+      [
+        ...statusOptions.map(status => ({
+          text: `${status.emoji} ${status.label}`,
+          onPress: () => atualizarStatusEntrega(status.key, status.label)
+        })),
+        { text: 'Cancelar', style: 'cancel' }
+      ]
+    );
+  };
+
+  const atualizarStatusEntrega = (novoStatus, labelStatus) => {
+    const agora = new Date();
+    const tempoFormatado = 'Agora';
+    
+    const novaEntradaHistorico = {
+      status: novoStatus,
+      tempo: tempoFormatado,
+      descricao: `Status alterado para: ${labelStatus}`
+    };
+
+    setEntregaData(prevData => ({
+      ...prevData,
+      status: novoStatus,
+      historico: [novaEntradaHistorico, ...prevData.historico]
+    }));
+
+    Alert.alert(
+      '✅ Status Atualizado!',
+      `Status da entrega #${entregaData.id} foi alterado para: ${labelStatus}`,
+      [{ text: 'OK' }]
+    );
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaWrapper>
       <ScrollView 
         style={{ flex: 1 }}
         contentContainerStyle={{ paddingBottom: 100, paddingTop: 10 }}
@@ -306,9 +352,62 @@ const EntregaDetalhesScreen = ({ navigation, route }) => {
           </View>
         </View>
 
-        {/* Ações */}
+        {/* Ações Rápidas de Status */}
         <View style={styles.card}>
-          <Text style={styles.cardTitle}>Ações</Text>
+          <Text style={styles.cardTitle}>Ações Rápidas</Text>
+          <View style={{ marginTop: 12 }}>
+            {entregaData.status === 'pending' && (
+              <TouchableOpacity 
+                style={[styles.button, { marginBottom: 12, backgroundColor: '#1ecb4f', borderColor: '#1ecb4f' }]}
+                onPress={() => atualizarStatusEntrega('accepted', 'Aceito')}
+              >
+                <Text style={[styles.buttonText, { color: '#ffffff' }]}>✅ Aceitar Pedido</Text>
+              </TouchableOpacity>
+            )}
+            
+            {entregaData.status === 'accepted' && (
+              <TouchableOpacity 
+                style={[styles.button, { marginBottom: 12, backgroundColor: '#FF8C00', borderColor: '#FF8C00' }]}
+                onPress={() => atualizarStatusEntrega('preparing', 'Preparando')}
+              >
+                <Text style={[styles.buttonText, { color: '#ffffff' }]}>👨‍🍳 Iniciar Preparo</Text>
+              </TouchableOpacity>
+            )}
+            
+            {entregaData.status === 'preparing' && (
+              <TouchableOpacity 
+                style={[styles.button, { marginBottom: 12, backgroundColor: '#FF8C00', borderColor: '#FF8C00' }]}
+                onPress={() => atualizarStatusEntrega('picked', 'Coletado')}
+              >
+                <Text style={[styles.buttonText, { color: '#ffffff' }]}>📦 Marcar como Coletado</Text>
+              </TouchableOpacity>
+            )}
+            
+            {entregaData.status === 'picked' && (
+              <TouchableOpacity 
+                style={[styles.button, { marginBottom: 12, backgroundColor: '#1ecb4f', borderColor: '#1ecb4f' }]}
+                onPress={() => atualizarStatusEntrega('delivered', 'Entregue')}
+              >
+                <Text style={[styles.buttonText, { color: '#ffffff' }]}>🎉 Marcar como Entregue</Text>
+              </TouchableOpacity>
+            )}
+            
+            {entregaData.status === 'delivered' && (
+              <View style={[styles.card, { backgroundColor: 'rgba(30, 203, 79, 0.1)', borderColor: '#1ecb4f', marginBottom: 12 }]}>
+                <Text style={[styles.text, { color: '#1ecb4f', textAlign: 'center', fontWeight: '600' }]}>
+                  🎉 Entrega Finalizada!
+                </Text>
+                <Text style={[styles.textSecondary, { textAlign: 'center', marginTop: 4 }]}>
+                  Esta entrega foi concluída com sucesso
+                </Text>
+              </View>
+            )}
+          </View>
+        </View>
+
+        {/* Ações Gerais */}
+        <View style={styles.card}>
+          <Text style={styles.cardTitle}>Ações Gerais</Text>
           <View style={{ marginTop: 12 }}>
             <TouchableOpacity 
               style={[styles.button, { marginBottom: 12 }]}
@@ -321,19 +420,21 @@ const EntregaDetalhesScreen = ({ navigation, route }) => {
               style={[styles.button, styles.buttonSecondary, { marginBottom: 12 }]}
               onPress={handleAtualizarStatus}
             >
-              <Text style={styles.buttonSecondaryText}>🔄 Atualizar Status</Text>
+              <Text style={styles.buttonSecondaryText}>🔄 Alterar Status Manualmente</Text>
             </TouchableOpacity>
             
-            <TouchableOpacity 
-              style={[styles.button, { backgroundColor: '#FF4500', borderColor: '#FF4500', borderWidth: 1 }]}
-              onPress={() => Alert.alert('Cancelar', 'Funcionalidade de cancelamento será implementada em breve!')}
-            >
-              <Text style={[styles.buttonText, { color: '#ffffff' }]}>❌ Cancelar Entrega</Text>
-            </TouchableOpacity>
+            {entregaData.status !== 'delivered' && (
+              <TouchableOpacity 
+                style={[styles.button, { backgroundColor: '#FF4500', borderColor: '#FF4500', borderWidth: 1 }]}
+                onPress={() => Alert.alert('Cancelar', 'Funcionalidade de cancelamento será implementada em breve!')}
+              >
+                <Text style={[styles.buttonText, { color: '#ffffff' }]}>❌ Cancelar Entrega</Text>
+              </TouchableOpacity>
+            )}
           </View>
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </SafeAreaWrapper>
   );
 };
 

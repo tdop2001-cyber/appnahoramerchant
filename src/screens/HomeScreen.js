@@ -4,11 +4,15 @@ import {
   ScrollView,
   Text,
   TouchableOpacity,
-  SafeAreaView,
 } from 'react-native';
-import styles from '../styles/styles';
+import { useTheme } from '../contexts/ThemeContext';
+import { createDynamicStyles } from '../styles/dynamicStyles';
+import SafeAreaWrapper from '../components/SafeAreaWrapper';
 
 const HomeScreen = ({ navigation }) => {
+  const theme = useTheme();
+  const styles = createDynamicStyles(theme);
+  
   const [stats] = useState({
     entregasHoje: 12,
     entregasAndamento: 5,
@@ -151,10 +155,10 @@ const HomeScreen = ({ navigation }) => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaWrapper>
       <ScrollView 
         style={{ flex: 1 }}
-        contentContainerStyle={{ paddingBottom: 100, paddingTop: 10 }}
+        contentContainerStyle={{ paddingBottom: 120, paddingTop: 10 }}
         showsVerticalScrollIndicator={false}
       >
         {/* Header */}
@@ -172,31 +176,31 @@ const HomeScreen = ({ navigation }) => {
         </View>
         {/* Estatísticas */}
         <View style={[styles.statsContainer, { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between' }]}>
-          <View style={[styles.statCard, { width: '48%', marginBottom: 12 }]}>
+          <View style={[styles.statCard, { width: '48%', marginBottom: 16, minHeight: 100, paddingVertical: 16 }]}>
             <Text style={styles.statValue}>{stats.entregasHoje}</Text>
             <Text style={styles.statLabel}>Entregas Hoje</Text>
-            <Text style={[styles.statLabel, { fontSize: 10, marginTop: 4, color: '#1ecb4f' }]}>
+            <Text style={[styles.statLabel, { fontSize: 11, marginTop: 6, color: '#1ecb4f', lineHeight: 14 }]}>
               2 entregas a mais que ontem
             </Text>
           </View>
-          <View style={[styles.statCard, { width: '48%', marginBottom: 12 }]}>
+          <View style={[styles.statCard, { width: '48%', marginBottom: 16, minHeight: 100, paddingVertical: 16 }]}>
             <Text style={styles.statValue}>{stats.entregasAndamento}</Text>
             <Text style={styles.statLabel}>Em Andamento</Text>
-            <Text style={[styles.statLabel, { fontSize: 10, marginTop: 4, color: '#FFD700' }]}>
+            <Text style={[styles.statLabel, { fontSize: 11, marginTop: 6, color: '#FFD700', lineHeight: 14 }]}>
               3 pendentes, 2 em rota
             </Text>
           </View>
-          <View style={[styles.statCard, { width: '48%', marginBottom: 12 }]}>
+          <View style={[styles.statCard, { width: '48%', marginBottom: 16, minHeight: 100, paddingVertical: 16 }]}>
             <Text style={styles.statValue}>{stats.tempoMedio}</Text>
             <Text style={styles.statLabel}>Tempo Médio</Text>
-            <Text style={[styles.statLabel, { fontSize: 10, marginTop: 4 }]}>
+            <Text style={[styles.statLabel, { fontSize: 11, marginTop: 6, lineHeight: 14 }]}>
               Média das últimas 24h
             </Text>
           </View>
-          <View style={[styles.statCard, { width: '48%', marginBottom: 12 }]}>
+          <View style={[styles.statCard, { width: '48%', marginBottom: 16, minHeight: 100, paddingVertical: 16 }]}>
             <Text style={styles.statValue}>{stats.faturamentoDia}</Text>
             <Text style={styles.statLabel}>Faturamento</Text>
-            <Text style={[styles.statLabel, { fontSize: 10, marginTop: 4, color: '#1ecb4f' }]}>
+            <Text style={[styles.statLabel, { fontSize: 11, marginTop: 6, color: '#1ecb4f', lineHeight: 14 }]}>
               12 entregas realizadas
             </Text>
           </View>
@@ -228,15 +232,22 @@ const HomeScreen = ({ navigation }) => {
         <View style={styles.card}>
           <View style={styles.cardHeader}>
             <Text style={styles.cardTitle}>Entregas Ativas</Text>
-            <TouchableOpacity onPress={() => navigation.navigate('Entregas')}>
+            <TouchableOpacity onPress={() => navigation.navigate('Entregas', { 
+              screen: 'EntregasList',
+              params: { initialTab: 'ativas' }
+            })}>
               <Text style={styles.textPrimary}>Ver Todas</Text>
             </TouchableOpacity>
           </View>
           
-          {entregasAtivas.map((entrega, index) => (
+          {entregasAtivas.slice(0, 2).map((entrega, index) => (
             <TouchableOpacity 
               key={entrega.id} 
-              style={[styles.listItem, { marginBottom: index < entregasAtivas.length - 1 ? 12 : 0 }]}
+              style={[styles.listItem, { 
+                marginBottom: index < Math.min(entregasAtivas.length, 2) - 1 ? 16 : 0,
+                paddingVertical: 12,
+                minHeight: 80
+              }]}
               onPress={() => navigation.navigate('Entregas', { 
                 screen: 'EntregaDetalhes', 
                 params: { entrega } 
@@ -251,15 +262,29 @@ const HomeScreen = ({ navigation }) => {
                   </Text>
                 </View>
               </View>
-              <Text style={styles.listItemSubtitle}>{entrega.cliente}</Text>
-              <Text style={[styles.listItemSubtitle, { marginTop: 4 }]}>
+              <Text style={[styles.listItemSubtitle, { marginTop: 6, lineHeight: 18 }]}>{entrega.cliente}</Text>
+              <Text style={[styles.listItemSubtitle, { marginTop: 6, lineHeight: 18 }]}>
                 {entrega.endereco}
               </Text>
-              <Text style={[styles.listItemSubtitle, { marginTop: 8, fontSize: 12 }]}>
+              <Text style={[styles.listItemSubtitle, { marginTop: 8, fontSize: 12, lineHeight: 16 }]}>
                 {entrega.tempo}
               </Text>
             </TouchableOpacity>
           ))}
+          
+          {entregasAtivas.length > 2 && (
+            <TouchableOpacity 
+              style={[styles.button, styles.buttonSecondary, { marginTop: 12 }]}
+              onPress={() => navigation.navigate('Entregas', { 
+                screen: 'EntregasList',
+                params: { initialTab: 'ativas' }
+              })}
+            >
+              <Text style={styles.buttonSecondaryText}>
+                Ver mais {entregasAtivas.length - 2} entregas
+              </Text>
+            </TouchableOpacity>
+          )}
         </View>
 
         {/* Ações Rápidas */}
@@ -275,7 +300,7 @@ const HomeScreen = ({ navigation }) => {
           </View>
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </SafeAreaWrapper>
   );
 };
 
