@@ -8,7 +8,6 @@ import {
 import { useTheme } from '../contexts/ThemeContext';
 import { createDynamicStyles } from '../styles/dynamicStyles';
 import SafeAreaWrapper from '../components/SafeAreaWrapper';
-import StatusCard from '../components/StatusCard';
 
 const HomeScreen = ({ navigation }) => {
   const theme = useTheme();
@@ -110,6 +109,26 @@ const HomeScreen = ({ navigation }) => {
     },
   ]);
 
+  // Função para obter a cor da faixa lateral baseada no status
+  const getStatusBorderColor = (status) => {
+    switch (status) {
+      case 'pending':
+        return '#FFD700'; // Dourado para pendente
+      case 'accepted':
+        return '#1ecb4f'; // Verde para aceito
+      case 'picked':
+        return '#2196F3'; // Azul para coletado
+      case 'delivered':
+        return '#1ecb4f'; // Verde para entregue
+      case 'completed':
+        return '#4CAF50'; // Verde mais escuro para concluída
+      case 'cancelled':
+        return '#FF4500'; // Vermelho para cancelada
+      default:
+        return '#666666'; // Cinza padrão
+    }
+  };
+
   const getStatusStyle = (status) => {
     switch (status) {
       case 'pending':
@@ -120,6 +139,10 @@ const HomeScreen = ({ navigation }) => {
         return [styles.statusBadge, styles.statusPicked];
       case 'delivered':
         return [styles.statusBadge, styles.statusDelivered];
+      case 'completed':
+        return [styles.statusBadge, styles.statusCompleted];
+      case 'cancelled':
+        return [styles.statusBadge, styles.statusCancelled];
       default:
         return [styles.statusBadge];
     }
@@ -135,6 +158,10 @@ const HomeScreen = ({ navigation }) => {
         return [styles.statusText, styles.statusPickedText];
       case 'delivered':
         return [styles.statusText, styles.statusDeliveredText];
+      case 'completed':
+        return [styles.statusText, styles.statusCompletedText];
+      case 'cancelled':
+        return [styles.statusText, styles.statusCancelledText];
       default:
         return [styles.statusText];
     }
@@ -150,6 +177,10 @@ const HomeScreen = ({ navigation }) => {
         return 'Coletado';
       case 'delivered':
         return 'Entregue';
+      case 'completed':
+        return 'Concluída';
+      case 'cancelled':
+        return 'Cancelada';
       default:
         return 'Desconhecido';
     }
@@ -208,11 +239,9 @@ const HomeScreen = ({ navigation }) => {
         </View>
 
         {/* Status do Sistema */}
-        <StatusCard 
-          status="operational"
-          title="Status do Sistema"
-          subtitle="Motoboys disponíveis próximos"
-        >
+        <View style={styles.card}>
+          <Text style={styles.cardTitle}>Status do Sistema</Text>
+          <Text style={styles.cardSubtitle}>Motoboys disponíveis próximos</Text>
           <View style={[styles.row, styles.spaceBetween, { marginTop: 16, flexWrap: 'wrap' }]}>
             <View style={{ minWidth: '30%', marginBottom: 12 }}>
               <Text style={styles.textSecondary}>Motoboys Online</Text>
@@ -229,15 +258,12 @@ const HomeScreen = ({ navigation }) => {
               </View>
             </View>
           </View>
-        </StatusCard>
+        </View>
 
         {/* Entregas Ativas */}
-        <StatusCard 
-          status="info"
-          title="Entregas Ativas"
-        >
+        <View style={styles.card}>
           <View style={styles.cardHeader}>
-            <View style={{ flex: 1 }} />
+            <Text style={styles.cardTitle}>Entregas Ativas</Text>
             <TouchableOpacity onPress={() => navigation.navigate('Entregas', { 
               screen: 'EntregasList',
               params: { initialTab: 'ativas' }
@@ -252,7 +278,12 @@ const HomeScreen = ({ navigation }) => {
               style={[styles.listItem, { 
                 marginBottom: index < Math.min(entregasAtivas.length, 2) - 1 ? 16 : 0,
                 paddingVertical: 12,
-                minHeight: 80
+                minHeight: 80,
+                flexDirection: 'row',
+                paddingLeft: 0,
+                overflow: 'hidden',
+                position: 'relative',
+                borderRadius: 12
               }]}
               onPress={() => navigation.navigate('Entregas', { 
                 screen: 'EntregaDetalhes', 
@@ -260,21 +291,38 @@ const HomeScreen = ({ navigation }) => {
               })}
               activeOpacity={0.7}
             >
-              <View style={styles.listItemHeader}>
-                <Text style={styles.listItemTitle}>#{entrega.id}</Text>
-                <View style={getStatusStyle(entrega.status)}>
-                  <Text style={getStatusTextStyle(entrega.status)}>
-                    {getStatusLabel(entrega.status)}
-                  </Text>
+              {/* Faixa lateral colorida com cantos arredondados */}
+              <View style={{
+                position: 'absolute',
+                left: 0,
+                top: 0,
+                bottom: 0,
+                width: 12,
+                backgroundColor: getStatusBorderColor(entrega.status),
+                borderTopLeftRadius: 12,
+                borderBottomLeftRadius: 12,
+                borderTopRightRadius: 0,
+                borderBottomRightRadius: 0
+              }} />
+              
+              {/* Conteúdo do card */}
+              <View style={{ flex: 1, paddingLeft: 20 }}>
+                <View style={styles.listItemHeader}>
+                  <Text style={styles.listItemTitle}>#{entrega.id}</Text>
+                  <View style={getStatusStyle(entrega.status)}>
+                    <Text style={getStatusTextStyle(entrega.status)}>
+                      {getStatusLabel(entrega.status)}
+                    </Text>
+                  </View>
                 </View>
+                <Text style={[styles.listItemSubtitle, { marginTop: 6, lineHeight: 18 }]}>{entrega.cliente}</Text>
+                <Text style={[styles.listItemSubtitle, { marginTop: 6, lineHeight: 18 }]}>
+                  {entrega.endereco}
+                </Text>
+                <Text style={[styles.listItemSubtitle, { marginTop: 8, fontSize: 12, lineHeight: 16 }]}>
+                  {entrega.tempo}
+                </Text>
               </View>
-              <Text style={[styles.listItemSubtitle, { marginTop: 6, lineHeight: 18 }]}>{entrega.cliente}</Text>
-              <Text style={[styles.listItemSubtitle, { marginTop: 6, lineHeight: 18 }]}>
-                {entrega.endereco}
-              </Text>
-              <Text style={[styles.listItemSubtitle, { marginTop: 8, fontSize: 12, lineHeight: 16 }]}>
-                {entrega.tempo}
-              </Text>
             </TouchableOpacity>
           ))}
           
@@ -291,13 +339,11 @@ const HomeScreen = ({ navigation }) => {
               </Text>
             </TouchableOpacity>
           )}
-        </StatusCard>
+        </View>
 
         {/* Ações Rápidas */}
-        <StatusCard 
-          status="info"
-          title="Ações Rápidas"
-        >
+        <View style={styles.card}>
+          <Text style={styles.cardTitle}>Ações Rápidas</Text>
           <View style={[styles.row, styles.spaceBetween, { marginTop: 16 }]}>
             <TouchableOpacity style={[styles.button, { flex: 1, marginRight: 8 }]}>
               <Text style={styles.buttonText}>📦 Nova Entrega</Text>
@@ -306,7 +352,7 @@ const HomeScreen = ({ navigation }) => {
               <Text style={styles.buttonSecondaryText}>📊 Relatórios</Text>
             </TouchableOpacity>
           </View>
-        </StatusCard>
+        </View>
       </ScrollView>
     </SafeAreaWrapper>
   );

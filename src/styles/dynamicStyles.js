@@ -226,10 +226,12 @@ export const createDynamicStyles = (theme) => {
       color: colors.textSecondary,
     },
     statusBadge: {
-      paddingHorizontal: 8,
-      paddingVertical: 4,
-      borderRadius: 12,
+      paddingHorizontal: 12,
+      paddingVertical: 6,
+      borderRadius: 8,
       backgroundColor: colors.secondary,
+      alignItems: 'center',
+      justifyContent: 'center',
     },
     statusText: {
       fontSize: 10,
@@ -243,10 +245,16 @@ export const createDynamicStyles = (theme) => {
       backgroundColor: 'rgba(30, 203, 79, 0.2)',
     },
     statusPicked: {
-      backgroundColor: 'rgba(255, 107, 53, 0.2)',
+      backgroundColor: 'rgba(33, 150, 243, 0.2)',
     },
     statusDelivered: {
       backgroundColor: 'rgba(30, 203, 79, 0.3)',
+    },
+    statusCompleted: {
+      backgroundColor: 'rgba(76, 175, 80, 0.2)',
+    },
+    statusCancelled: {
+      backgroundColor: 'rgba(255, 69, 0, 0.2)',
     },
     statusPendingText: {
       color: '#FFD700',
@@ -255,10 +263,16 @@ export const createDynamicStyles = (theme) => {
       color: '#1ecb4f',
     },
     statusPickedText: {
-      color: '#FF6B35',
+      color: '#2196F3',
     },
     statusDeliveredText: {
       color: '#1ecb4f',
+    },
+    statusCompletedText: {
+      color: '#4CAF50',
+    },
+    statusCancelledText: {
+      color: '#FF4500',
     },
     backButton: {
       marginBottom: 8,

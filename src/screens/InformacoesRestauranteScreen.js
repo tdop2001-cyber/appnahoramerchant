@@ -189,3 +189,4 @@ const InformacoesRestauranteScreen = ({ navigation }) => {
 };
 
 export default InformacoesRestauranteScreen;
+

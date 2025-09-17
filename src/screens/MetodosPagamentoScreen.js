@@ -368,3 +368,4 @@ const MetodosPagamentoScreen = ({ navigation }) => {
 };
 
 export default MetodosPagamentoScreen;
+
