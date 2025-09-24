@@ -169,7 +169,7 @@ export default StyleSheet.create({
     color: '#999999',
   },
 
-  // Status badges
+  // Status badges específicos para motorista
   statusBadge: {
     paddingHorizontal: 8,
     paddingVertical: 4,
@@ -182,27 +182,35 @@ export default StyleSheet.create({
     fontWeight: '600',
   },
   
-  statusPending: {
-    backgroundColor: 'rgba(255, 127, 80, 0.2)',
+  statusAvailable: {
+    backgroundColor: 'rgba(30, 203, 79, 0.2)',
   },
   
-  statusPendingText: {
-    color: '#ff7f50',
+  statusAvailableText: {
+    color: '#1ecb4f',
   },
   
-  statusAccepted: {
-    backgroundColor: 'rgba(173, 216, 230, 0.2)',
+  statusBusy: {
+    backgroundColor: 'rgba(255, 69, 0, 0.2)',
   },
   
-  statusAcceptedText: {
-    color: '#ADD8E6',
+  statusBusyText: {
+    color: '#FF4500',
   },
   
-  statusPicked: {
+  statusOffline: {
+    backgroundColor: 'rgba(153, 153, 153, 0.2)',
+  },
+  
+  statusOfflineText: {
+    color: '#999999',
+  },
+  
+  statusPickedUp: {
     backgroundColor: 'rgba(255, 140, 0, 0.2)',
   },
   
-  statusPickedText: {
+  statusPickedUpText: {
     color: '#FF8C00',
   },
   

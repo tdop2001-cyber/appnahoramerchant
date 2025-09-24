@@ -1,17 +1,16 @@
 import React from 'react';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView, StatusBar } from 'react-native';
 import { useTheme } from '../contexts/ThemeContext';
-import { createDynamicStyles } from '../styles/dynamicStyles';
 
-const SafeAreaWrapper = ({ children, style, edges = ['top', 'left', 'right'] }) => {
-  const theme = useTheme();
-  const styles = createDynamicStyles(theme);
-  
+const SafeAreaWrapper = ({ children, style }) => {
+  const { isDarkMode } = useTheme();
+
   return (
-    <SafeAreaView 
-      style={[styles.container, style]} 
-      edges={edges}
-    >
+    <SafeAreaView style={[{ flex: 1, backgroundColor: isDarkMode ? '#0a0a0a' : '#f5f5f5' }, style]}>
+      <StatusBar 
+        barStyle={isDarkMode ? 'light-content' : 'dark-content'} 
+        backgroundColor={isDarkMode ? '#0a0a0a' : '#f5f5f5'}
+      />
       {children}
     </SafeAreaView>
   );

@@ -1,30 +1,34 @@
 import React from 'react';
-import { Text } from 'react-native';
+import { View, Text } from 'react-native';
+import { useTheme } from '../contexts/ThemeContext';
 
-const TabBarIcon = ({ route, focused, color, size }) => {
-  let emoji = '';
+const TabBarIcon = ({ name, focused, size = 24 }) => {
+  const { isDarkMode, colors } = useTheme();
+  const themeColors = isDarkMode ? colors.dark : colors.light;
+  
+  const iconColor = focused ? themeColors.tabBarActive : themeColors.tabBarInactive;
 
-  switch (route.name) {
-    case 'Início':
-      emoji = '🏠';
-      break;
-    case 'Entregas':
-      emoji = '📦';
-      break;
-    case 'Produtos':
-      emoji = '🍽️';
-      break;
-    case 'Configurações':
-      emoji = '⚙️';
-      break;
-    default:
-      emoji = '❓';
-  }
+  const getIcon = () => {
+    switch (name) {
+      case 'home':
+        return '🏠';
+      case 'deliveries':
+        return '📦';
+      case 'earnings':
+        return '💰';
+      case 'profile':
+        return '👤';
+      default:
+        return '❓';
+    }
+  };
 
   return (
-    <Text style={{ fontSize: size, color: color }}>
-      {emoji}
-    </Text>
+    <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+      <Text style={{ fontSize: size, color: iconColor }}>
+        {getIcon()}
+      </Text>
+    </View>
   );
 };
 

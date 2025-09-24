@@ -448,3 +448,5 @@ O **VaiJá Restaurante** apresenta uma estética **moderna, profissional e funci
 *Versão do App: 1.0.0*
 *Framework: React Native*
 
+
+

@@ -1,86 +1,37 @@
-import React, { useEffect, useRef, useState } from 'react';
-import {
-  View,
-  StyleSheet,
-  Dimensions,
-  StatusBar,
-  Text,
-  ActivityIndicator,
-} from 'react-native';
-import Video from 'react-native-video';
-
-const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
+import React, { useEffect } from 'react';
+import { View, Text, StyleSheet, Animated } from 'react-native';
+import { useTheme } from '../contexts/ThemeContext';
 
 const SplashScreen = ({ navigation }) => {
-  const videoRef = useRef(null);
-  const [videoLoaded, setVideoLoaded] = useState(false);
-  const [videoError, setVideoError] = useState(false);
+  const { isDarkMode, colors } = useTheme();
+  const themeColors = isDarkMode ? colors.dark : colors.light;
+  const fadeAnim = new Animated.Value(0);
 
   useEffect(() => {
-    // Navegar para a tela principal após o vídeo terminar ou timeout
+    // Animação de fade in
+    Animated.timing(fadeAnim, {
+      toValue: 1,
+      duration: 1000,
+      useNativeDriver: true,
+    }).start();
+
+    // Navegar para a tela principal após 2 segundos
     const timer = setTimeout(() => {
       navigation.replace('Home');
-    }, 8000); // 8 segundos máximo
+    }, 2000);
 
     return () => clearTimeout(timer);
-  }, [navigation]);
-
-  const onVideoEnd = () => {
-    // Navegar imediatamente quando o vídeo terminar
-    navigation.replace('Home');
-  };
-
-  const onVideoError = (error) => {
-    console.log('Erro ao reproduzir vídeo:', error);
-    setVideoError(true);
-    // Se houver erro, navegar após 3 segundos
-    setTimeout(() => {
-      navigation.replace('Home');
-    }, 3000);
-  };
-
-  const onVideoLoad = () => {
-    setVideoLoaded(true);
-  };
-
-  const onVideoLoadStart = () => {
-    setVideoLoaded(false);
-  };
+  }, []);
 
   return (
-    <View style={styles.container}>
-      <StatusBar hidden />
-      
-      {!videoError ? (
-        <Video
-          ref={videoRef}
-          source={{ uri: 'file:///android_asset/Criação_de_Animação_NaHora_.mp4' }}
-          style={styles.video}
-          resizeMode="cover"
-          onEnd={onVideoEnd}
-          onError={onVideoError}
-          onLoad={onVideoLoad}
-          onLoadStart={onVideoLoadStart}
-          repeat={false}
-          muted={false}
-          playInBackground={false}
-          playWhenInactive={false}
-          ignoreSilentSwitch="ignore"
-          mixWithOthers="mix"
-        />
-      ) : (
-        <View style={styles.errorContainer}>
-          <Text style={styles.errorText}>Erro ao carregar vídeo</Text>
-          <Text style={styles.errorSubtext}>Carregando aplicativo...</Text>
-        </View>
-      )}
-
-      {!videoLoaded && !videoError && (
-        <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color="#FFFFFF" />
-          <Text style={styles.loadingText}>Carregando...</Text>
-        </View>
-      )}
+    <View style={[styles.container, { backgroundColor: themeColors.background }]}>
+      <Animated.View style={[styles.content, { opacity: fadeAnim }]}>
+        <Text style={[styles.logo, { color: themeColors.primary }]}>VaiJá</Text>
+        <Text style={[styles.subtitle, { color: themeColors.textSecondary }]}>Motorista</Text>
+        <Text style={[styles.description, { color: themeColors.textSecondary }]}>
+          Conectando você às melhores entregas
+        </Text>
+      </Animated.View>
     </View>
   );
 };
@@ -88,48 +39,26 @@ const SplashScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#000',
     justifyContent: 'center',
     alignItems: 'center',
   },
-  video: {
-    width: screenWidth,
-    height: screenHeight,
-    backgroundColor: '#000',
-  },
-  loadingContainer: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    justifyContent: 'center',
+  content: {
     alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.8)',
   },
-  loadingText: {
-    color: '#FFFFFF',
-    fontSize: 16,
-    marginTop: 16,
-    fontWeight: '500',
-  },
-  errorContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingHorizontal: 40,
-  },
-  errorText: {
-    color: '#FFFFFF',
-    fontSize: 18,
+  logo: {
+    fontSize: 48,
     fontWeight: 'bold',
-    textAlign: 'center',
     marginBottom: 8,
   },
-  errorSubtext: {
-    color: '#CCCCCC',
-    fontSize: 14,
+  subtitle: {
+    fontSize: 24,
+    fontWeight: '600',
+    marginBottom: 16,
+  },
+  description: {
+    fontSize: 16,
     textAlign: 'center',
+    paddingHorizontal: 40,
   },
 });
 
