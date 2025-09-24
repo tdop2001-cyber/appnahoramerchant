@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Alert 
 } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import { useTheme } from '../contexts/ThemeContext';
 import SafeAreaWrapper from '../components/SafeAreaWrapper';
 import StatusCard from '../components/StatusCard';
@@ -16,6 +17,7 @@ import StatusCard from '../components/StatusCard';
 const HomeScreen = () => {
   const { isDarkMode, colors } = useTheme();
   const themeColors = isDarkMode ? colors.dark : colors.light;
+  const navigation = useNavigation();
 
   const stats = [
     { title: 'Entregas Hoje', value: '12', status: 'available' },
@@ -23,6 +25,23 @@ const HomeScreen = () => {
     { title: 'Avaliação', value: '4.8', status: 'available' },
     { title: 'Tempo Online', value: '6h 30m', status: 'available' },
   ];
+
+  // Funções de navegação para os botões
+  const handleVerEntregas = () => {
+    navigation.navigate('Entregas');
+  };
+
+  const handleGanhos = () => {
+    navigation.navigate('Ganhos');
+  };
+
+  const handleLocalizacao = () => {
+    Alert.alert('Localização', 'Funcionalidade de localização será implementada em breve!');
+  };
+
+  const handleConfiguracoes = () => {
+    navigation.navigate('Configurações');
+  };
 
   return (
     <SafeAreaWrapper>
@@ -60,19 +79,31 @@ const HomeScreen = () => {
             Ações Rápidas
           </Text>
           <View style={styles.actionsGrid}>
-            <TouchableOpacity style={[styles.actionButton, { backgroundColor: themeColors.surface, borderColor: themeColors.border }]}>
+            <TouchableOpacity 
+              style={[styles.actionButton, { backgroundColor: themeColors.surface, borderColor: themeColors.border }]}
+              onPress={handleVerEntregas}
+            >
               <Text style={[styles.actionIcon, { color: themeColors.primary }]}>📦</Text>
               <Text style={[styles.actionText, { color: themeColors.text }]}>Ver Entregas</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={[styles.actionButton, { backgroundColor: themeColors.surface, borderColor: themeColors.border }]}>
+            <TouchableOpacity 
+              style={[styles.actionButton, { backgroundColor: themeColors.surface, borderColor: themeColors.border }]}
+              onPress={handleGanhos}
+            >
               <Text style={[styles.actionIcon, { color: themeColors.primary }]}>💰</Text>
               <Text style={[styles.actionText, { color: themeColors.text }]}>Ganhos</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={[styles.actionButton, { backgroundColor: themeColors.surface, borderColor: themeColors.border }]}>
+            <TouchableOpacity 
+              style={[styles.actionButton, { backgroundColor: themeColors.surface, borderColor: themeColors.border }]}
+              onPress={handleLocalizacao}
+            >
               <Text style={[styles.actionIcon, { color: themeColors.primary }]}>📍</Text>
               <Text style={[styles.actionText, { color: themeColors.text }]}>Localização</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={[styles.actionButton, { backgroundColor: themeColors.surface, borderColor: themeColors.border }]}>
+            <TouchableOpacity 
+              style={[styles.actionButton, { backgroundColor: themeColors.surface, borderColor: themeColors.border }]}
+              onPress={handleConfiguracoes}
+            >
               <Text style={[styles.actionIcon, { color: themeColors.primary }]}>⚙️</Text>
               <Text style={[styles.actionText, { color: themeColors.text }]}>Configurações</Text>
             </TouchableOpacity>
@@ -92,7 +123,7 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
     paddingHorizontal: 20,
     borderBottomWidth: 1,
-    marginTop: 10,
+    marginTop: 20, // Aumentado de 10 para 20
   },
   headerTitle: {
     fontSize: 24,

@@ -41,10 +41,10 @@ const StatusCard = ({ title, value, status, icon }) => {
 
 const styles = StyleSheet.create({
   card: {
+    width: '48%', // Mesma largura dos botões de ações rápidas
     borderRadius: 12,
-    padding: 16,
-    marginHorizontal: 8,
-    marginVertical: 4,
+    padding: 20, // Mesmo padding dos botões de ações rápidas
+    marginBottom: 12, // Mesma margem inferior dos botões
     borderWidth: 1,
     minHeight: 100,
     justifyContent: 'space-between',

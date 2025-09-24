@@ -2,22 +2,22 @@ import React from 'react';
 import { View, Text } from 'react-native';
 import { useTheme } from '../contexts/ThemeContext';
 
-const TabBarIcon = ({ name, focused, size = 24 }) => {
+const TabBarIcon = ({ route, focused, size = 24 }) => {
   const { isDarkMode, colors } = useTheme();
   const themeColors = isDarkMode ? colors.dark : colors.light;
   
   const iconColor = focused ? themeColors.tabBarActive : themeColors.tabBarInactive;
 
   const getIcon = () => {
-    switch (name) {
-      case 'home':
+    switch (route.name) {
+      case 'Início':
         return '🏠';
-      case 'deliveries':
+      case 'Entregas':
         return '📦';
-      case 'earnings':
-        return '💰';
-      case 'profile':
-        return '👤';
+      case 'Produtos':
+        return '🍽️';
+      case 'Configurações':
+        return '⚙️';
       default:
         return '❓';
     }
