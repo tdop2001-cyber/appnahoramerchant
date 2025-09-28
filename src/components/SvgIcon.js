@@ -344,6 +344,19 @@ const ChampionsIcon = ({ size = 24, color = '#F59E0B' }) => (
   </Svg>
 );
 
+const RelatoriosIcon = ({ size = 24, color = '#111827' }) => (
+  <Svg width={size} height={size} viewBox="0 0 24 24" role="img" aria-label="Relatórios">
+    <Path d="M3 3v18h18" fill="none" stroke={color} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+    <Path d="M18 9l-5 5-4-4-6 6" fill="none" stroke={color} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+  </Svg>
+);
+
+const DeleteIcon = ({ size = 24, color = '#FF4500' }) => (
+  <Svg width={size} height={size} viewBox="0 0 24 24" role="img" aria-label="Excluir">
+    <Path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6h14zM10 11v6M14 11v6" fill="none" stroke={color} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+  </Svg>
+);
+
 
 const iconComponents = {
   // Ícones principais
@@ -392,6 +405,8 @@ const iconComponents = {
   checkmark: CheckCircleIcon,
   'check-circle': CheckCircleIcon,
   champions: ChampionsIcon,
+  relatorios: RelatoriosIcon,
+  delete: DeleteIcon,
   // Ícones específicos para entregas
   hourglass: HourglassIcon,
   pending: HourglassIcon,

@@ -237,7 +237,7 @@ const ConfiguracoesScreen = ({ navigation }) => {
               onPress={() => navigation.navigate('Relatorios')}
             >
               <View style={styles.row}>
-                <SvgIcon name="chart" size={20} color={colors.text} style={{ marginRight: 12 }} />
+                <SvgIcon name="relatorios" size={20} color={colors.text} style={{ marginRight: 12 }} />
                 <View>
                   <Text style={styles.text}>Relatórios</Text>
                   <Text style={styles.textSecondary}>Visualizar relatórios de vendas</Text>
@@ -274,7 +274,7 @@ const ConfiguracoesScreen = ({ navigation }) => {
               onPress={handleLogout}
             >
               <View style={styles.row}>
-                <SvgIcon name="exit" size={16} color={colors.textSecondary} style={{ marginRight: 8 }} />
+                <SvgIcon name="canceled" size={16} color={colors.textSecondary} style={{ marginRight: 8 }} />
                 <Text style={styles.buttonSecondaryText}>Sair da Conta</Text>
               </View>
             </TouchableOpacity>
@@ -284,7 +284,7 @@ const ConfiguracoesScreen = ({ navigation }) => {
               onPress={handleDeleteAccount}
             >
               <View style={styles.row}>
-                <SvgIcon name="trash" size={16} color={colors.primaryText} style={{ marginRight: 8 }} />
+                <SvgIcon name="delete" size={16} color={colors.primaryText} style={{ marginRight: 8 }} />
                 <Text style={styles.buttonText}>Excluir Conta</Text>
               </View>
             </TouchableOpacity>

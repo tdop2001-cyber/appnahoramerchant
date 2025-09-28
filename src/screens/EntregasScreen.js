@@ -541,7 +541,7 @@ const EntregasScreen = ({ navigation, route }) => {
                       <Text style={styles.buttonText} numberOfLines={1}>Detalhes</Text>
                     </View>
                   </TouchableOpacity>
-                  {activeTab === 'ativas' && (
+                  {activeTab === 'ativas' && (entrega.status === 'accepted' || entrega.status === 'picked') && (
                     <TouchableOpacity 
                       style={[styles.button, styles.buttonSecondary, { flex: 1 }]}
                       onPress={() => console.log('Funcionalidade de rastreamento será implementada em breve!')}

@@ -1,0 +1,15 @@
+<!-- Ícone "Calendar" - fundo transparente -->
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" role="img" aria-label="Calendário">
+  <title>Calendário</title>
+  <desc>Ícone minimalista de calendário</desc>
+
+  <!-- corpo do calendário -->
+  <rect x="3" y="5" width="18" height="16" rx="2" ry="2" fill="none" stroke="#111827" stroke-width="2"></rect>
+
+  <!-- barra superior -->
+  <line x1="3" y1="9" x2="21" y2="9" stroke="#111827" stroke-width="2" stroke-linecap="round"></line>
+
+  <!-- argolas do calendário -->
+  <line x1="8" y1="3" x2="8" y2="7" stroke="#111827" stroke-width="2" stroke-linecap="round"></line>
+  <line x1="16" y1="3" x2="16" y2="7" stroke="#111827" stroke-width="2" stroke-linecap="round"></line>
+</svg>
