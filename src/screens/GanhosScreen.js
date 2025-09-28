@@ -10,6 +10,7 @@ import {
 import { useTheme } from '../contexts/ThemeContext';
 import SafeAreaWrapper from '../components/SafeAreaWrapper';
 import StatusCard from '../components/StatusCard';
+import SvgIcon from '../components/SvgIcon';
 
 const { width } = Dimensions.get('window');
 
@@ -93,9 +94,12 @@ const GanhosScreen = () => {
       <ScrollView style={[styles.container, { backgroundColor: themeColors.background }]}>
         {/* Header */}
         <View style={[styles.header, { backgroundColor: themeColors.surface, borderBottomColor: themeColors.border }]}>
-          <Text style={[styles.headerTitle, { color: themeColors.text }]}>
-            💰 Meus Ganhos
-          </Text>
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <SvgIcon name="money" size={24} color={themeColors.primary} style={{ marginRight: 8 }} />
+            <Text style={[styles.headerTitle, { color: themeColors.text }]}>
+              Meus Ganhos
+            </Text>
+          </View>
           <Text style={[styles.headerSubtitle, { color: themeColors.textSecondary }]}>
             Acompanhe seus rendimentos
           </Text>

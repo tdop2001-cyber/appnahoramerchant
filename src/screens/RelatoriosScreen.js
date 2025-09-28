@@ -9,6 +9,7 @@ import {
 import { useTheme } from '../contexts/ThemeContext';
 import { createDynamicStyles } from '../styles/dynamicStyles';
 import SafeAreaWrapper from '../components/SafeAreaWrapper';
+import SvgIcon from '../components/SvgIcon';
 
 const RelatoriosScreen = ({ navigation }) => {
   const theme = useTheme();
@@ -17,33 +18,44 @@ const RelatoriosScreen = ({ navigation }) => {
   
   const [periodoSelecionado, setPeriodoSelecionado] = useState('hoje');
 
+  const getReportIcon = (id) => {
+    switch (id) {
+      case 1:
+        return 'chart';
+      case 2:
+        return 'box';
+      case 3:
+        return 'restaurant';
+      case 4:
+        return 'money';
+      default:
+        return 'chart';
+    }
+  };
+
   const relatorios = [
     {
       id: 1,
       titulo: 'Relatório de Vendas',
       descricao: 'Vendas por período, produtos mais vendidos e análise de receita',
-      icone: '📊',
       cor: '#4CAF50',
     },
     {
       id: 2,
       titulo: 'Relatório de Entregas',
       descricao: 'Status das entregas, tempo médio e avaliações dos clientes',
-      icone: '🚚',
       cor: '#2196F3',
     },
     {
       id: 3,
       titulo: 'Relatório de Produtos',
       descricao: 'Produtos mais vendidos, estoque e performance por categoria',
-      icone: '🍽️',
       cor: '#FF9800',
     },
     {
       id: 4,
       titulo: 'Relatório Financeiro',
       descricao: 'Receitas, despesas, lucros e análise de pagamentos',
-      icone: '💰',
       cor: '#9C27B0',
     },
   ];
@@ -107,7 +119,10 @@ const RelatoriosScreen = ({ navigation }) => {
 
         {/* Resumo Rápido */}
         <View style={styles.card}>
-          <Text style={styles.cardTitle}>📈 Resumo Rápido</Text>
+          <View style={styles.row}>
+            <SvgIcon name="chart" size={20} color={colors.primary} style={{ marginRight: 8 }} />
+            <Text style={styles.cardTitle}>Resumo Rápido</Text>
+          </View>
           <View style={{ marginTop: 16 }}>
             <View style={[styles.row, styles.spaceBetween, { marginBottom: 12 }]}>
               <Text style={styles.textSecondary}>Vendas Hoje</Text>
@@ -181,7 +196,11 @@ const RelatoriosScreen = ({ navigation }) => {
                 onPress={() => handleGerarRelatorio(relatorio)}
               >
                 <View style={{ marginRight: 16 }}>
-                  <Text style={{ fontSize: 24 }}>{relatorio.icone}</Text>
+                  <SvgIcon 
+                    name={getReportIcon(relatorio.id)} 
+                    size={24} 
+                    color={relatorio.cor} 
+                  />
                 </View>
                 <View style={styles.flex1}>
                   <Text style={[styles.text, { fontWeight: '600', marginBottom: 4 }]}>
@@ -228,9 +247,12 @@ const RelatoriosScreen = ({ navigation }) => {
               borderLeftWidth: 4,
               borderLeftColor: '#2196F3',
             }}>
-              <Text style={[styles.text, { fontWeight: '600', marginBottom: 8 }]}>
-                📊 Como usar os relatórios:
-              </Text>
+              <View style={styles.row}>
+                <SvgIcon name="chart" size={16} color={colors.primary} style={{ marginRight: 8 }} />
+                <Text style={[styles.text, { fontWeight: '600', marginBottom: 8 }]}>
+                  Como usar os relatórios:
+                </Text>
+              </View>
               <Text style={[styles.textSecondary, { fontSize: 12, lineHeight: 18 }]}>
                 • Selecione o período desejado{'\n'}
                 • Escolha o tipo de relatório{'\n'}

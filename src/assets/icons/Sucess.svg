@@ -1,0 +1,11 @@
+<!-- Ícone "Check Circle / Sucesso" - fundo transparente -->
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" role="img" aria-label="Sucesso">
+  <title>Sucesso</title>
+  <desc>Ícone circular com check, representando sucesso ou confirmação</desc>
+
+  <!-- círculo -->
+  <circle cx="12" cy="12" r="10" fill="none" stroke="#22C55E" stroke-width="2"></circle>
+  
+  <!-- check -->
+  <path d="M8 12.5l3 3 5-6" fill="none" stroke="#22C55E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>

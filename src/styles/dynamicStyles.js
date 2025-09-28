@@ -242,7 +242,7 @@ export const createDynamicStyles = (theme) => {
       backgroundColor: 'rgba(255, 215, 0, 0.2)',
     },
     statusAccepted: {
-      backgroundColor: 'rgba(30, 203, 79, 0.2)',
+      backgroundColor: 'rgba(156, 39, 176, 0.2)',
     },
     statusPicked: {
       backgroundColor: 'rgba(33, 150, 243, 0.2)',
@@ -260,7 +260,7 @@ export const createDynamicStyles = (theme) => {
       color: '#FFD700',
     },
     statusAcceptedText: {
-      color: '#1ecb4f',
+      color: '#9C27B0',
     },
     statusPickedText: {
       color: '#2196F3',

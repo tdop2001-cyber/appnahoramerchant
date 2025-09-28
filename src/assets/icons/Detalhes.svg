@@ -1,0 +1,15 @@
+<!-- Ícone "Detalhes" - fundo transparente -->
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" role="img" aria-label="Detalhes">
+  <title>Detalhes</title>
+  <desc>Ícone minimalista de lista de detalhes</desc>
+
+  <!-- linhas de detalhes -->
+  <line x1="8" y1="6" x2="20" y2="6" stroke="#111827" stroke-width="2" stroke-linecap="round"></line>
+  <line x1="8" y1="12" x2="20" y2="12" stroke="#111827" stroke-width="2" stroke-linecap="round"></line>
+  <line x1="8" y1="18" x2="20" y2="18" stroke="#111827" stroke-width="2" stroke-linecap="round"></line>
+
+  <!-- bolinhas de cada detalhe -->
+  <circle cx="4" cy="6" r="1.5" fill="#111827"></circle>
+  <circle cx="4" cy="12" r="1.5" fill="#111827"></circle>
+  <circle cx="4" cy="18" r="1.5" fill="#111827"></circle>
+</svg>

@@ -1,0 +1,14 @@
+<!-- Ícone "Troféu" - fundo transparente -->
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" role="img" aria-label="Troféu">
+  <title>Troféu</title>
+  <desc>Ícone minimalista de troféu, fundo transparente</desc>
+
+  <!-- base do troféu -->
+  <rect x="9" y="18" width="6" height="3" fill="none" stroke="#F59E0B" stroke-width="2" stroke-linejoin="round"></rect>
+
+  <!-- taça -->
+  <path d="M8 4h8v4a4 4 0 0 1-8 0V4z" fill="none" stroke="#F59E0B" stroke-width="2" stroke-linejoin="round"></path>
+
+  <!-- alças laterais -->
+  <path d="M8 5H5a2 2 0 0 0 0 4h2M16 5h3a2 2 0 0 1 0 4h-2" fill="none" stroke="#F59E0B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>

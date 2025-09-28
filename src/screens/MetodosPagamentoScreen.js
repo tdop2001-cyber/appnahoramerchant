@@ -11,19 +11,35 @@ import {
 import { useTheme } from '../contexts/ThemeContext';
 import { createDynamicStyles } from '../styles/dynamicStyles';
 import SafeAreaWrapper from '../components/SafeAreaWrapper';
+import SvgIcon from '../components/SvgIcon';
 
 const MetodosPagamentoScreen = ({ navigation }) => {
   const theme = useTheme();
   const styles = createDynamicStyles(theme);
   const colors = theme.colors[theme.isDarkMode ? 'dark' : 'light'];
   
+  const getPaymentIcon = (type) => {
+    switch (type) {
+      case 'cash':
+        return 'money';
+      case 'debit':
+      case 'credit':
+        return 'credit-card';
+      case 'pix':
+        return 'phone';
+      case 'meal_voucher':
+        return 'restaurant';
+      default:
+        return 'credit-card';
+    }
+  };
+
   const [paymentMethods, setPaymentMethods] = useState([
     {
       id: '1',
       name: 'Dinheiro',
       type: 'cash',
       enabled: true,
-      icon: '💵',
       description: 'Pagamento em dinheiro na entrega',
       fee: 0,
     },
@@ -32,7 +48,6 @@ const MetodosPagamentoScreen = ({ navigation }) => {
       name: 'Cartão de Débito',
       type: 'debit',
       enabled: true,
-      icon: '💳',
       description: 'Cartão de débito na entrega',
       fee: 2.5,
     },
@@ -41,7 +56,6 @@ const MetodosPagamentoScreen = ({ navigation }) => {
       name: 'Cartão de Crédito',
       type: 'credit',
       enabled: true,
-      icon: '💳',
       description: 'Cartão de crédito na entrega',
       fee: 3.5,
     },
@@ -50,7 +64,6 @@ const MetodosPagamentoScreen = ({ navigation }) => {
       name: 'PIX',
       type: 'pix',
       enabled: true,
-      icon: '📱',
       description: 'Transferência instantânea PIX',
       fee: 0,
     },
@@ -59,7 +72,6 @@ const MetodosPagamentoScreen = ({ navigation }) => {
       name: 'Vale Refeição',
       type: 'meal_voucher',
       enabled: false,
-      icon: '🍽️',
       description: 'Vale refeição/alimentação',
       fee: 1.5,
     },
@@ -95,7 +107,6 @@ const MetodosPagamentoScreen = ({ navigation }) => {
       name: newMethod.name,
       type: newMethod.type,
       enabled: true,
-      icon: '💳',
       description: newMethod.description || 'Método de pagamento personalizado',
       fee: parseFloat(newMethod.fee) || 0,
     };
@@ -134,7 +145,12 @@ const MetodosPagamentoScreen = ({ navigation }) => {
     <View key={method.id} style={styles.card}>
       <View style={[styles.row, styles.spaceBetween, { marginBottom: 8 }]}>
         <View style={styles.row}>
-          <Text style={{ fontSize: 24, marginRight: 12 }}>{method.icon}</Text>
+          <SvgIcon 
+            name={getPaymentIcon(method.type)} 
+            size={24} 
+            color={colors.primary} 
+            style={{ marginRight: 12 }} 
+          />
           <View>
             <Text style={styles.listItemTitle}>{method.name}</Text>
             <Text style={styles.textSecondary}>{method.description}</Text>
@@ -158,7 +174,7 @@ const MetodosPagamentoScreen = ({ navigation }) => {
             onPress={() => handleDeleteMethod(method.id)}
             style={{ padding: 8 }}
           >
-            <Text style={{ color: '#FF4500', fontSize: 16 }}>🗑️</Text>
+            <SvgIcon name="trash" size={16} color="#FF4500" />
           </TouchableOpacity>
         )}
       </View>
@@ -244,7 +260,10 @@ const MetodosPagamentoScreen = ({ navigation }) => {
         {/* Resumo */}
         <View style={styles.card}>
           <View style={styles.cardHeader}>
-            <Text style={styles.cardTitle}>📊 Resumo</Text>
+            <View style={styles.row}>
+              <SvgIcon name="chart" size={20} color={colors.primary} style={{ marginRight: 8 }} />
+              <Text style={styles.cardTitle}>Resumo</Text>
+            </View>
           </View>
           
           <View style={[styles.row, styles.spaceBetween, { marginBottom: 12 }]}>
@@ -291,7 +310,10 @@ const MetodosPagamentoScreen = ({ navigation }) => {
         {/* Configurações Avançadas */}
         <View style={styles.card}>
           <View style={styles.cardHeader}>
-            <Text style={styles.cardTitle}>⚙️ Configurações Avançadas</Text>
+            <View style={styles.row}>
+              <SvgIcon name="settings" size={20} color={colors.primary} style={{ marginRight: 8 }} />
+              <Text style={styles.cardTitle}>Configurações Avançadas</Text>
+            </View>
           </View>
           
           <View style={[styles.row, styles.spaceBetween, { marginBottom: 16 }]}>
@@ -346,7 +368,10 @@ const MetodosPagamentoScreen = ({ navigation }) => {
         {/* Informações Importantes */}
         <View style={styles.card}>
           <View style={styles.cardHeader}>
-            <Text style={styles.cardTitle}>ℹ️ Informações Importantes</Text>
+            <View style={styles.row}>
+              <SvgIcon name="info" size={20} color={colors.primary} style={{ marginRight: 8 }} />
+              <Text style={styles.cardTitle}>Informações Importantes</Text>
+            </View>
           </View>
           
           <Text style={[styles.textSecondary, { marginBottom: 12 }]}>

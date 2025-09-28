@@ -9,6 +9,7 @@ import {
 import { useTheme } from '../contexts/ThemeContext';
 import { createDynamicStyles } from '../styles/dynamicStyles';
 import SafeAreaWrapper from '../components/SafeAreaWrapper';
+import SvgIcon from '../components/SvgIcon';
 
 const EntregasScreen = ({ navigation, route }) => {
   const theme = useTheme();
@@ -56,6 +57,15 @@ const EntregasScreen = ({ navigation, route }) => {
       itens: ['1x Combo Executivo', '1x Suco Natural'],
     },
     {
+      id: '47319',
+      cliente: 'Carlos Mendes',
+      endereco: 'Rua das Rosas, 456 - Centro',
+      status: 'delivered',
+      tempo: '1 hora atrás',
+      valor: 'R$ 28,50',
+      itens: ['1x Prato Especial', '1x Refrigerante'],
+    },
+    {
       id: '47318',
       cliente: 'Pedro Costa',
       endereco: 'Rua das Palmeiras, 789 - Vila Madalena',
@@ -94,15 +104,6 @@ const EntregasScreen = ({ navigation, route }) => {
       valor: 'R$ 35,00',
       itens: ['1x Pizza Grande', '1x Refrigerante'],
     },
-    {
-      id: '47298',
-      cliente: 'Lucia Oliveira',
-      endereco: 'Av. Faria Lima, 1500 - Itaim Bibi',
-      status: 'completed',
-      tempo: '5 horas atrás',
-      valor: 'R$ 42,00',
-      itens: ['1x Combo Família', '2x Refrigerante'],
-    },
   ]);
 
   // Função para obter a cor da faixa lateral baseada no status
@@ -111,13 +112,11 @@ const EntregasScreen = ({ navigation, route }) => {
       case 'pending':
         return '#FFD700'; // Dourado para pendente
       case 'accepted':
-        return '#1ecb4f'; // Verde para aceito
+        return '#9C27B0'; // Roxo para aceito
       case 'picked':
         return '#2196F3'; // Azul para coletado
       case 'delivered':
         return '#1ecb4f'; // Verde para entregue
-      case 'completed':
-        return '#4CAF50'; // Verde mais escuro para concluída
       case 'cancelled':
         return '#FF4500'; // Vermelho para cancelada
       default:
@@ -135,8 +134,6 @@ const EntregasScreen = ({ navigation, route }) => {
         return [styles.statusBadge, styles.statusPicked];
       case 'delivered':
         return [styles.statusBadge, styles.statusDelivered];
-      case 'completed':
-        return [styles.statusBadge, styles.statusCompleted];
       case 'cancelled':
         return [styles.statusBadge, styles.statusCancelled];
       default:
@@ -154,8 +151,6 @@ const EntregasScreen = ({ navigation, route }) => {
         return [styles.statusText, styles.statusPickedText];
       case 'delivered':
         return [styles.statusText, styles.statusDeliveredText];
-      case 'completed':
-        return [styles.statusText, styles.statusCompletedText];
       case 'cancelled':
         return [styles.statusText, styles.statusCancelledText];
       default:
@@ -173,8 +168,6 @@ const EntregasScreen = ({ navigation, route }) => {
         return 'Coletado';
       case 'delivered':
         return 'Entregue';
-      case 'completed':
-        return 'Concluída';
       case 'cancelled':
         return 'Cancelada';
       default:
@@ -182,22 +175,20 @@ const EntregasScreen = ({ navigation, route }) => {
     }
   };
 
-  const getStatusEmoji = (status) => {
+  const getStatusIcon = (status) => {
     switch (status) {
       case 'pending':
-        return '⏳';
+        return 'hourglass';
       case 'accepted':
-        return '✅';
+        return 'check-circle';
       case 'picked':
-        return '📦';
+        return 'box';
       case 'delivered':
-        return '🎉';
-      case 'completed':
-        return '✅';
+        return 'champions';
       case 'cancelled':
-        return '❌';
+        return 'canceled';
       default:
-        return '❓';
+        return 'question';
     }
   };
 
@@ -242,13 +233,16 @@ const EntregasScreen = ({ navigation, route }) => {
           ]}
           onPress={() => setActiveTab('ativas')}
         >
-          <Text
-            style={[
-              activeTab === 'ativas' ? styles.buttonText : styles.buttonSecondaryText,
-            ]}
-          >
-            📦 Ativas ({entregasAtivas.length})
-          </Text>
+          <View style={styles.row}>
+            <SvgIcon name="box" size={16} color={activeTab === 'ativas' ? colors.primaryText : colors.textSecondary} style={{ marginRight: 6 }} />
+            <Text
+              style={[
+                activeTab === 'ativas' ? styles.buttonText : styles.buttonSecondaryText,
+              ]}
+            >
+              Ativas ({entregasAtivas.length})
+            </Text>
+          </View>
         </TouchableOpacity>
         <TouchableOpacity
           style={[
@@ -263,7 +257,10 @@ const EntregasScreen = ({ navigation, route }) => {
               activeTab === 'historico' ? styles.buttonText : styles.buttonSecondaryText,
             ]}
           >
-            📋 Histórico ({entregasHistorico.length})
+            <View style={styles.row}>
+              <SvgIcon name="details" size={16} color={activeTab === 'historico' ? colors.primaryText : colors.textSecondary} style={{ marginRight: 6 }} />
+              <Text>Histórico ({entregasHistorico.length})</Text>
+            </View>
           </Text>
         </TouchableOpacity>
       </View>
@@ -291,25 +288,26 @@ const EntregasScreen = ({ navigation, route }) => {
         <Text style={[styles.text, { fontSize: 12, fontWeight: '600', marginBottom: 6 }]}>
           Filtrar por Status
         </Text>
-        <View style={[styles.row, { flexWrap: 'wrap', gap: 4 }]}>
+        <View style={[styles.row, { flexWrap: 'nowrap', gap: 2 }]}>
           <TouchableOpacity
             style={[
               styles.button,
               selectedStatus === 'todos' ? {} : styles.buttonSecondary,
               { 
-                paddingVertical: 4, 
-                paddingHorizontal: 8, 
-                minHeight: 28,
-                borderRadius: 8,
+                paddingVertical: 3, 
+                paddingHorizontal: 6, 
+                minHeight: 24,
+                borderRadius: 6,
                 justifyContent: 'center',
-                alignItems: 'center'
+                alignItems: 'center',
+                flex: 1
               }
             ]}
             onPress={() => setSelectedStatus('todos')}
           >
             <Text style={[
               selectedStatus === 'todos' ? styles.buttonText : styles.buttonSecondaryText,
-              { fontSize: 10, textAlign: 'center' }
+              { fontSize: 9, textAlign: 'center' }
             ]}>
               Todos
             </Text>
@@ -318,21 +316,22 @@ const EntregasScreen = ({ navigation, route }) => {
           <TouchableOpacity
             style={[
               { 
-                paddingVertical: 4, 
-                paddingHorizontal: 8, 
-                minHeight: 28,
-                borderRadius: 8,
+                paddingVertical: 3, 
+                paddingHorizontal: 6, 
+                minHeight: 24,
+                borderRadius: 6,
                 backgroundColor: selectedStatus === 'pending' ? '#FFD700' : 'transparent',
                 borderWidth: 1,
                 borderColor: '#FFD700',
                 justifyContent: 'center',
-                alignItems: 'center'
+                alignItems: 'center',
+                flex: 1
               }
             ]}
             onPress={() => setSelectedStatus('pending')}
           >
             <Text style={[
-              { fontSize: 10, fontWeight: '600', textAlign: 'center' },
+              { fontSize: 9, fontWeight: '600', textAlign: 'center' },
               selectedStatus === 'pending' ? { color: '#000000' } : { color: '#FFD700' }
             ]}>
               Pendente
@@ -342,21 +341,47 @@ const EntregasScreen = ({ navigation, route }) => {
           <TouchableOpacity
             style={[
               { 
-                paddingVertical: 4, 
-                paddingHorizontal: 8, 
-                minHeight: 28,
-                borderRadius: 8,
+                paddingVertical: 3, 
+                paddingHorizontal: 6, 
+                minHeight: 24,
+                borderRadius: 6,
+                backgroundColor: selectedStatus === 'accepted' ? '#9C27B0' : 'transparent',
+                borderWidth: 1,
+                borderColor: '#9C27B0',
+                justifyContent: 'center',
+                alignItems: 'center',
+                flex: 1
+              }
+            ]}
+            onPress={() => setSelectedStatus('accepted')}
+          >
+            <Text style={[
+              { fontSize: 9, fontWeight: '600', textAlign: 'center' },
+              selectedStatus === 'accepted' ? { color: '#ffffff' } : { color: '#9C27B0' }
+            ]}>
+              Aceito
+            </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={[
+              { 
+                paddingVertical: 3, 
+                paddingHorizontal: 6, 
+                minHeight: 24,
+                borderRadius: 6,
                 backgroundColor: selectedStatus === 'picked' ? '#2196F3' : 'transparent',
                 borderWidth: 1,
                 borderColor: '#2196F3',
                 justifyContent: 'center',
-                alignItems: 'center'
+                alignItems: 'center',
+                flex: 1
               }
             ]}
             onPress={() => setSelectedStatus('picked')}
           >
             <Text style={[
-              { fontSize: 10, fontWeight: '600', textAlign: 'center' },
+              { fontSize: 9, fontWeight: '600', textAlign: 'center' },
               selectedStatus === 'picked' ? { color: '#ffffff' } : { color: '#2196F3' }
             ]}>
               Coletado
@@ -366,21 +391,22 @@ const EntregasScreen = ({ navigation, route }) => {
           <TouchableOpacity
             style={[
               { 
-                paddingVertical: 4, 
-                paddingHorizontal: 8, 
-                minHeight: 28,
-                borderRadius: 8,
+                paddingVertical: 3, 
+                paddingHorizontal: 6, 
+                minHeight: 24,
+                borderRadius: 6,
                 backgroundColor: selectedStatus === 'delivered' ? '#1ecb4f' : 'transparent',
                 borderWidth: 1,
                 borderColor: '#1ecb4f',
                 justifyContent: 'center',
-                alignItems: 'center'
+                alignItems: 'center',
+                flex: 1
               }
             ]}
             onPress={() => setSelectedStatus('delivered')}
           >
             <Text style={[
-              { fontSize: 10, fontWeight: '600', textAlign: 'center' },
+              { fontSize: 9, fontWeight: '600', textAlign: 'center' },
               selectedStatus === 'delivered' ? { color: '#000000' } : { color: '#1ecb4f' }
             ]}>
               Entregue
@@ -390,21 +416,22 @@ const EntregasScreen = ({ navigation, route }) => {
           <TouchableOpacity
             style={[
               { 
-                paddingVertical: 4, 
-                paddingHorizontal: 8, 
-                minHeight: 28,
-                borderRadius: 8,
+                paddingVertical: 3, 
+                paddingHorizontal: 6, 
+                minHeight: 24,
+                borderRadius: 6,
                 backgroundColor: selectedStatus === 'cancelled' ? '#FF4500' : 'transparent',
                 borderWidth: 1,
                 borderColor: '#FF4500',
                 justifyContent: 'center',
-                alignItems: 'center'
+                alignItems: 'center',
+                flex: 1
               }
             ]}
             onPress={() => setSelectedStatus('cancelled')}
           >
             <Text style={[
-              { fontSize: 10, fontWeight: '600', textAlign: 'center' },
+              { fontSize: 9, fontWeight: '600', textAlign: 'center' },
               selectedStatus === 'cancelled' ? { color: '#ffffff' } : { color: '#FF4500' }
             ]}>
               Cancelado
@@ -453,9 +480,12 @@ const EntregasScreen = ({ navigation, route }) => {
               <View style={{ flex: 1, paddingLeft: 20 }}>
                 <View style={styles.listItemHeader}>
                   <View style={styles.row}>
-                    <Text style={[styles.listItemTitle, { marginRight: 8 }]}>
-                      {getStatusEmoji(entrega.status)}
-                    </Text>
+                    <SvgIcon 
+                      name={getStatusIcon(entrega.status)} 
+                      size={20} 
+                      color={colors.primary} 
+                      style={{ marginRight: 8 }} 
+                    />
                     <Text style={styles.listItemTitle}>#{entrega.id}</Text>
                   </View>
                   <View style={getStatusStyle(entrega.status)}>
@@ -465,15 +495,24 @@ const EntregasScreen = ({ navigation, route }) => {
                   </View>
                 </View>
 
-                <Text style={[styles.listItemSubtitle, { marginTop: 8 }]}>
-                  👤 {entrega.cliente}
-                </Text>
-                <Text style={[styles.listItemSubtitle, { marginTop: 4 }]}>
-                  📍 {entrega.endereco}
-                </Text>
-                <Text style={[styles.listItemSubtitle, { marginTop: 4 }]}>
-                  ⏰ {entrega.tempo}
-                </Text>
+                <View style={[styles.row, { marginTop: 8, alignItems: 'center' }]}>
+                  <SvgIcon name="user" size={16} color={colors.textSecondary} style={{ marginRight: 6 }} />
+                  <Text style={styles.listItemSubtitle}>
+                    {entrega.cliente}
+                  </Text>
+                </View>
+                <View style={[styles.row, { marginTop: 4, alignItems: 'center' }]}>
+                  <SvgIcon name="location" size={16} color={colors.textSecondary} style={{ marginRight: 6 }} />
+                  <Text style={styles.listItemSubtitle}>
+                    {entrega.endereco}
+                  </Text>
+                </View>
+                <View style={[styles.row, { marginTop: 4, alignItems: 'center' }]}>
+                  <SvgIcon name="alarm-clock" size={16} color={colors.textSecondary} style={{ marginRight: 6 }} />
+                  <Text style={styles.listItemSubtitle}>
+                    {entrega.tempo}
+                  </Text>
+                </View>
 
                 <View style={[styles.row, styles.spaceBetween, { marginTop: 12 }]}>
                   <View>
@@ -497,14 +536,20 @@ const EntregasScreen = ({ navigation, route }) => {
                     style={[styles.button, { flex: 1 }]}
                     onPress={() => navigation.navigate('EntregaDetalhes', { entrega })}
                   >
-                    <Text style={styles.buttonText} numberOfLines={1}>📋 Detalhes</Text>
+                    <View style={styles.row}>
+                      <SvgIcon name="details" size={16} color={colors.primaryText} style={{ marginRight: 6 }} />
+                      <Text style={styles.buttonText} numberOfLines={1}>Detalhes</Text>
+                    </View>
                   </TouchableOpacity>
                   {activeTab === 'ativas' && (
                     <TouchableOpacity 
                       style={[styles.button, styles.buttonSecondary, { flex: 1 }]}
                       onPress={() => console.log('Funcionalidade de rastreamento será implementada em breve!')}
                     >
-                      <Text style={styles.buttonSecondaryText} numberOfLines={1}>📍 Rastrear</Text>
+                      <View style={styles.row}>
+                        <SvgIcon name="location" size={16} color={colors.textSecondary} style={{ marginRight: 6 }} />
+                        <Text style={styles.buttonSecondaryText} numberOfLines={1}>Rastrear</Text>
+                      </View>
                     </TouchableOpacity>
                   )}
                 </View>

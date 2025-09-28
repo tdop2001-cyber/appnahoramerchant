@@ -10,6 +10,7 @@ import {
 import { useTheme } from '../contexts/ThemeContext';
 import { createDynamicStyles } from '../styles/dynamicStyles';
 import SafeAreaWrapper from '../components/SafeAreaWrapper';
+import SvgIcon from '../components/SvgIcon';
 
 const EntregaDetalhesScreen = ({ navigation, route }) => {
   const theme = useTheme();
@@ -97,20 +98,20 @@ const EntregaDetalhesScreen = ({ navigation, route }) => {
     }
   };
 
-  const getStatusEmoji = (status) => {
+  const getStatusIcon = (status) => {
     switch (status) {
       case 'pending':
-        return '⏳';
+        return 'hourglass';
       case 'accepted':
-        return '✅';
+        return 'check-circle';
       case 'preparing':
-        return '👨‍🍳';
+        return 'clock';
       case 'picked':
-        return '📦';
+        return 'box';
       case 'delivered':
-        return '🎉';
+        return 'celebration';
       default:
-        return '❓';
+        return 'question';
     }
   };
 
@@ -173,7 +174,7 @@ const EntregaDetalhesScreen = ({ navigation, route }) => {
     }));
 
     Alert.alert(
-      '✅ Status Atualizado!',
+      'Status Atualizado!',
       `Status da entrega #${entregaData.id} foi alterado para: ${labelStatus}`,
       [{ text: 'OK' }]
     );
@@ -204,9 +205,12 @@ const EntregaDetalhesScreen = ({ navigation, route }) => {
         <View style={styles.card}>
           <View style={styles.listItemHeader}>
             <View style={styles.row}>
-              <Text style={[styles.listItemTitle, { marginRight: 8 }]}>
-                {getStatusEmoji(entregaData.status)}
-              </Text>
+              <SvgIcon 
+                name={getStatusIcon(entregaData.status)} 
+                size={20} 
+                color={colors.primary} 
+                style={{ marginRight: 8 }} 
+              />
               <Text style={styles.listItemTitle}>#{entregaData.id}</Text>
             </View>
             <View style={getStatusStyle(entregaData.status)}>
@@ -215,9 +219,12 @@ const EntregaDetalhesScreen = ({ navigation, route }) => {
               </Text>
             </View>
           </View>
-          <Text style={[styles.textSecondary, { marginTop: 8 }]}>
-            ⏰ {entregaData.tempo}
-          </Text>
+          <View style={[styles.row, { marginTop: 8, alignItems: 'center' }]}>
+            <SvgIcon name="alarm-clock" size={16} color={colors.textSecondary} style={{ marginRight: 6 }} />
+            <Text style={styles.textSecondary}>
+              {entregaData.tempo}
+            </Text>
+          </View>
         </View>
 
         {/* Informações do Cliente */}
@@ -242,7 +249,10 @@ const EntregaDetalhesScreen = ({ navigation, route }) => {
             style={[styles.button, { marginTop: 12 }]}
             onPress={handleLigarCliente}
           >
-            <Text style={styles.buttonText}>📞 Ligar para Cliente</Text>
+            <View style={styles.row}>
+              <SvgIcon name="phone" size={16} color={colors.primaryText} style={{ marginRight: 6 }} />
+              <Text style={styles.buttonText}>Ligar para Cliente</Text>
+            </View>
           </TouchableOpacity>
         </View>
 
@@ -264,7 +274,10 @@ const EntregaDetalhesScreen = ({ navigation, route }) => {
             </View>
             <View style={[styles.row, { marginBottom: 8 }]}>
               <Text style={[styles.text, { fontWeight: '600', width: 80 }]}>Avaliação:</Text>
-              <Text style={styles.text}>⭐ {entregaData.motoboy?.avaliacao || 'N/A'}/5.0</Text>
+              <View style={styles.row}>
+                <SvgIcon name="star" size={16} color="#FBBF24" style={{ marginRight: 6 }} />
+                <Text style={styles.text}>{entregaData.motoboy?.avaliacao || 'N/A'}/5.0</Text>
+              </View>
             </View>
           </View>
           
@@ -272,7 +285,10 @@ const EntregaDetalhesScreen = ({ navigation, route }) => {
             style={[styles.button, { marginTop: 12 }]}
             onPress={handleLigarMotoboy}
           >
-            <Text style={styles.buttonText}>📞 Ligar para Motoboy</Text>
+            <View style={styles.row}>
+              <SvgIcon name="phone" size={16} color={colors.primaryText} style={{ marginRight: 6 }} />
+              <Text style={styles.buttonText}>Ligar para Motoboy</Text>
+            </View>
           </TouchableOpacity>
         </View>
 
@@ -361,7 +377,10 @@ const EntregaDetalhesScreen = ({ navigation, route }) => {
                 style={[styles.button, { marginBottom: 12, backgroundColor: '#1ecb4f', borderColor: '#1ecb4f' }]}
                 onPress={() => atualizarStatusEntrega('accepted', 'Aceito')}
               >
-                <Text style={[styles.buttonText, { color: '#ffffff' }]}>✅ Aceitar Pedido</Text>
+                <View style={styles.row}>
+                  <SvgIcon name="check-circle" size={16} color="#ffffff" style={{ marginRight: 6 }} />
+                  <Text style={[styles.buttonText, { color: '#ffffff' }]}>Aceitar Pedido</Text>
+                </View>
               </TouchableOpacity>
             )}
             
@@ -413,14 +432,20 @@ const EntregaDetalhesScreen = ({ navigation, route }) => {
               style={[styles.button, { marginBottom: 12 }]}
               onPress={handleRastrear}
             >
-              <Text style={styles.buttonText}>📍 Rastrear Entrega</Text>
+              <View style={styles.row}>
+                <SvgIcon name="location" size={16} color={colors.primaryText} style={{ marginRight: 6 }} />
+                <Text style={styles.buttonText}>Rastrear Entrega</Text>
+              </View>
             </TouchableOpacity>
             
             <TouchableOpacity 
               style={[styles.button, styles.buttonSecondary, { marginBottom: 12 }]}
               onPress={handleAtualizarStatus}
             >
-              <Text style={styles.buttonSecondaryText}>🔄 Alterar Status Manualmente</Text>
+              <View style={styles.row}>
+                <SvgIcon name="sync" size={16} color={colors.textSecondary} style={{ marginRight: 6 }} />
+                <Text style={styles.buttonSecondaryText}>Alterar Status Manualmente</Text>
+              </View>
             </TouchableOpacity>
             
             {entregaData.status !== 'delivered' && (
@@ -428,7 +453,10 @@ const EntregaDetalhesScreen = ({ navigation, route }) => {
                 style={[styles.button, { backgroundColor: '#FF4500', borderColor: '#FF4500', borderWidth: 1 }]}
                 onPress={() => Alert.alert('Cancelar', 'Funcionalidade de cancelamento será implementada em breve!')}
               >
-                <Text style={[styles.buttonText, { color: '#ffffff' }]}>❌ Cancelar Entrega</Text>
+                <View style={styles.row}>
+                  <SvgIcon name="cancel" size={16} color="#ffffff" style={{ marginRight: 6 }} />
+                  <Text style={[styles.buttonText, { color: '#ffffff' }]}>Cancelar Entrega</Text>
+                </View>
               </TouchableOpacity>
             )}
           </View>

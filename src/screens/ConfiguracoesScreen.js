@@ -10,6 +10,7 @@ import {
 import { useTheme } from '../contexts/ThemeContext';
 import { createDynamicStyles } from '../styles/dynamicStyles';
 import SafeAreaWrapper from '../components/SafeAreaWrapper';
+import SvgIcon from '../components/SvgIcon';
 
 const ConfiguracoesScreen = ({ navigation }) => {
   const theme = useTheme();
@@ -63,7 +64,10 @@ const ConfiguracoesScreen = ({ navigation }) => {
       <ScrollView showsVerticalScrollIndicator={false}>
         {/* Informações do Restaurante */}
         <View style={styles.card}>
-          <Text style={styles.cardTitle}>🏪 Informações do Restaurante</Text>
+          <View style={styles.row}>
+            <SvgIcon name="home" size={20} color={colors.primary} style={{ marginRight: 8 }} />
+            <Text style={styles.cardTitle}>Informações do Restaurante</Text>
+          </View>
           <View style={{ marginTop: 16 }}>
             <View style={[styles.row, styles.spaceBetween, { marginBottom: 12 }]}>
               <Text style={styles.textSecondary}>Nome</Text>
@@ -92,13 +96,19 @@ const ConfiguracoesScreen = ({ navigation }) => {
             style={[styles.button, { marginTop: 16 }]}
             onPress={() => navigation.navigate('InformacoesRestaurante')}
           >
-            <Text style={styles.buttonText}>✏️ Editar Informações</Text>
+            <View style={styles.row}>
+              <SvgIcon name="edit" size={16} color={colors.primaryText} style={{ marginRight: 8 }} />
+              <Text style={styles.buttonText}>Editar Informações</Text>
+            </View>
           </TouchableOpacity>
         </View>
 
         {/* Configurações de Notificações */}
         <View style={styles.card}>
-          <Text style={styles.cardTitle}>🔔 Notificações</Text>
+          <View style={styles.row}>
+            <SvgIcon name="bell" size={20} color={colors.primary} style={{ marginRight: 8 }} />
+            <Text style={styles.cardTitle}>Notificações</Text>
+          </View>
           <View style={{ marginTop: 16 }}>
             <View style={[styles.row, styles.spaceBetween, { marginBottom: 16 }]}>
               <View style={styles.flex1}>
@@ -150,7 +160,10 @@ const ConfiguracoesScreen = ({ navigation }) => {
 
         {/* Configurações de Aparência */}
         <View style={styles.card}>
-          <Text style={styles.cardTitle}>🎨 Aparência</Text>
+          <View style={styles.row}>
+            <SvgIcon name="palette" size={20} color={colors.primary} style={{ marginRight: 8 }} />
+            <Text style={styles.cardTitle}>Aparência</Text>
+          </View>
           <View style={{ marginTop: 16 }}>
             <View style={[styles.row, styles.spaceBetween]}>
               <View style={styles.flex1}>
@@ -172,14 +185,17 @@ const ConfiguracoesScreen = ({ navigation }) => {
 
         {/* Configurações de Conta */}
         <View style={styles.card}>
-          <Text style={styles.cardTitle}>👤 Conta</Text>
+          <View style={styles.row}>
+            <SvgIcon name="user" size={20} color={colors.primary} style={{ marginRight: 8 }} />
+            <Text style={styles.cardTitle}>Conta</Text>
+          </View>
           <View style={{ marginTop: 16 }}>
             <TouchableOpacity 
               style={[styles.row, styles.spaceBetween, { marginBottom: 16 }]}
               onPress={() => navigation.navigate('AlterarSenha')}
             >
               <View style={styles.row}>
-                <Text style={{ fontSize: 20, marginRight: 12 }}>🔒</Text>
+                <SvgIcon name="lock" size={20} color={colors.text} style={{ marginRight: 12 }} />
                 <View>
                   <Text style={styles.text}>Alterar Senha</Text>
                   <Text style={styles.textSecondary}>Atualizar sua senha de acesso</Text>
@@ -193,7 +209,7 @@ const ConfiguracoesScreen = ({ navigation }) => {
               onPress={() => navigation.navigate('MetodosPagamento')}
             >
               <View style={styles.row}>
-                <Text style={{ fontSize: 20, marginRight: 12 }}>💳</Text>
+                <SvgIcon name="credit-card" size={20} color={colors.text} style={{ marginRight: 12 }} />
                 <View>
                   <Text style={styles.text}>Métodos de Pagamento</Text>
                   <Text style={styles.textSecondary}>Gerenciar formas de recebimento</Text>
@@ -207,7 +223,7 @@ const ConfiguracoesScreen = ({ navigation }) => {
               onPress={() => navigation.navigate('EnderecosRetirada')}
             >
               <View style={styles.row}>
-                <Text style={{ fontSize: 20, marginRight: 12 }}>📍</Text>
+                <SvgIcon name="location" size={20} color={colors.text} style={{ marginRight: 12 }} />
                 <View>
                   <Text style={styles.text}>Endereços de Retirada</Text>
                   <Text style={styles.textSecondary}>Gerenciar endereços para coleta</Text>
@@ -221,7 +237,7 @@ const ConfiguracoesScreen = ({ navigation }) => {
               onPress={() => navigation.navigate('Relatorios')}
             >
               <View style={styles.row}>
-                <Text style={{ fontSize: 20, marginRight: 12 }}>📊</Text>
+                <SvgIcon name="chart" size={20} color={colors.text} style={{ marginRight: 12 }} />
                 <View>
                   <Text style={styles.text}>Relatórios</Text>
                   <Text style={styles.textSecondary}>Visualizar relatórios de vendas</Text>
@@ -235,7 +251,7 @@ const ConfiguracoesScreen = ({ navigation }) => {
               onPress={() => navigation.navigate('AjudaSuporte')}
             >
               <View style={styles.row}>
-                <Text style={{ fontSize: 20, marginRight: 12 }}>❓</Text>
+                <SvgIcon name="question" size={20} color={colors.text} style={{ marginRight: 12 }} />
                 <View>
                   <Text style={styles.text}>Ajuda e Suporte</Text>
                   <Text style={styles.textSecondary}>Central de ajuda e contato</Text>
@@ -248,27 +264,39 @@ const ConfiguracoesScreen = ({ navigation }) => {
 
         {/* Ações da Conta */}
         <View style={styles.card}>
-          <Text style={styles.cardTitle}>⚠️ Ações da Conta</Text>
+          <View style={styles.row}>
+            <SvgIcon name="warning" size={20} color={colors.destructive || '#FF4500'} style={{ marginRight: 8 }} />
+            <Text style={styles.cardTitle}>Ações da Conta</Text>
+          </View>
           <View style={{ marginTop: 16 }}>
             <TouchableOpacity
               style={[styles.button, styles.buttonSecondary, { marginBottom: 12 }]}
               onPress={handleLogout}
             >
-              <Text style={styles.buttonSecondaryText}>🚪 Sair da Conta</Text>
+              <View style={styles.row}>
+                <SvgIcon name="exit" size={16} color={colors.textSecondary} style={{ marginRight: 8 }} />
+                <Text style={styles.buttonSecondaryText}>Sair da Conta</Text>
+              </View>
             </TouchableOpacity>
             
             <TouchableOpacity
               style={[styles.button, { backgroundColor: '#FF4500' }]}
               onPress={handleDeleteAccount}
             >
-              <Text style={styles.buttonText}>🗑️ Excluir Conta</Text>
+              <View style={styles.row}>
+                <SvgIcon name="trash" size={16} color={colors.primaryText} style={{ marginRight: 8 }} />
+                <Text style={styles.buttonText}>Excluir Conta</Text>
+              </View>
             </TouchableOpacity>
           </View>
         </View>
 
         {/* Informações do App */}
         <View style={styles.card}>
-          <Text style={styles.cardTitle}>ℹ️ Sobre o App</Text>
+          <View style={styles.row}>
+            <SvgIcon name="info" size={20} color={colors.primary} style={{ marginRight: 8 }} />
+            <Text style={styles.cardTitle}>Sobre o App</Text>
+          </View>
           <View style={{ marginTop: 16 }}>
             <View style={[styles.row, styles.spaceBetween, { marginBottom: 12 }]}>
               <Text style={styles.textSecondary}>Versão</Text>

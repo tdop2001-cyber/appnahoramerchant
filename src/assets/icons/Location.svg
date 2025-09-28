@@ -1,0 +1,15 @@
+<!-- Ícone "Localização / Map Pin" - fundo transparente -->
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" role="img" aria-label="Localização">
+  <title>Localização</title>
+  <desc>Ícone de pino de localização (map-pin) minimalista — fundo transparente</desc>
+
+  <!-- contorno do pino -->
+  <path d="M12 2.5
+           C8.4 2.5 5.5 5.4 5.5 9
+           C5.5 13.9 12 21 12 21
+           C12 21 18.5 13.9 18.5 9
+           C18.5 5.4 15.6 2.5 12 2.5 Z" fill="none" stroke="#111827" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"></path>
+
+  <!-- círculo central -->
+  <circle cx="12" cy="9" r="2.6" fill="none" stroke="#111827" stroke-width="1.6"></circle>
+</svg>

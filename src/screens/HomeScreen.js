@@ -1,16 +1,17 @@
 import React, { useState } from 'react';
-import { 
-  View, 
-  Text, 
-  StyleSheet, 
-  ScrollView, 
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
   TouchableOpacity,
-  Alert 
+  Alert
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useTheme } from '../contexts/ThemeContext';
 import SafeAreaWrapper from '../components/SafeAreaWrapper';
 import StatusCard from '../components/StatusCard';
+import SvgIcon from '../components/SvgIcon';
 
 
 // Componente principal - apenas a tela inicial
@@ -48,9 +49,12 @@ const HomeScreen = () => {
       <ScrollView style={[styles.container, { backgroundColor: themeColors.background }]}>
         {/* Header */}
         <View style={[styles.header, { backgroundColor: themeColors.surface, borderBottomColor: themeColors.border }]}>
-          <Text style={[styles.headerTitle, { color: themeColors.text }]}>
-            Olá, João! 👋
-          </Text>
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <Text style={[styles.headerTitle, { color: themeColors.text }]}>
+              Olá, João!
+            </Text>
+            <SvgIcon name="wave" size={24} color={themeColors.primary} style={{ marginLeft: 8 }} />
+          </View>
           <Text style={[styles.headerSubtitle, { color: themeColors.textSecondary }]}>
             Pronto para suas entregas?
           </Text>
@@ -83,28 +87,28 @@ const HomeScreen = () => {
               style={[styles.actionButton, { backgroundColor: themeColors.surface, borderColor: themeColors.border }]}
               onPress={handleVerEntregas}
             >
-              <Text style={[styles.actionIcon, { color: themeColors.primary }]}>📦</Text>
+              <SvgIcon name="box" size={24} color={themeColors.primary} />
               <Text style={[styles.actionText, { color: themeColors.text }]}>Ver Entregas</Text>
             </TouchableOpacity>
             <TouchableOpacity 
               style={[styles.actionButton, { backgroundColor: themeColors.surface, borderColor: themeColors.border }]}
               onPress={handleGanhos}
             >
-              <Text style={[styles.actionIcon, { color: themeColors.primary }]}>💰</Text>
+              <SvgIcon name="money" size={24} color={themeColors.primary} />
               <Text style={[styles.actionText, { color: themeColors.text }]}>Ganhos</Text>
             </TouchableOpacity>
             <TouchableOpacity 
               style={[styles.actionButton, { backgroundColor: themeColors.surface, borderColor: themeColors.border }]}
               onPress={handleLocalizacao}
             >
-              <Text style={[styles.actionIcon, { color: themeColors.primary }]}>📍</Text>
+              <SvgIcon name="location" size={24} color={themeColors.primary} />
               <Text style={[styles.actionText, { color: themeColors.text }]}>Localização</Text>
             </TouchableOpacity>
             <TouchableOpacity 
               style={[styles.actionButton, { backgroundColor: themeColors.surface, borderColor: themeColors.border }]}
               onPress={handleConfiguracoes}
             >
-              <Text style={[styles.actionIcon, { color: themeColors.primary }]}>⚙️</Text>
+              <SvgIcon name="settings" size={24} color={themeColors.primary} />
               <Text style={[styles.actionText, { color: themeColors.text }]}>Configurações</Text>
             </TouchableOpacity>
           </View>
@@ -162,10 +166,6 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     borderWidth: 1,
     alignItems: 'center',
-  },
-  actionIcon: {
-    fontSize: 24,
-    marginBottom: 8,
   },
   actionText: {
     fontSize: 14,

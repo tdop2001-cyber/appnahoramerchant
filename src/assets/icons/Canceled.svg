@@ -1,0 +1,12 @@
+<!-- Ícone "Cancelado" - fundo transparente -->
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" role="img" aria-label="Cancelado">
+  <title>Cancelado</title>
+  <desc>Ícone circular com X, representando cancelamento</desc>
+
+  <!-- círculo -->
+  <circle cx="12" cy="12" r="9" fill="none" stroke="#DC2626" stroke-width="2"></circle>
+
+  <!-- X -->
+  <line x1="9" y1="9" x2="15" y2="15" stroke="#DC2626" stroke-width="2" stroke-linecap="round"></line>
+  <line x1="15" y1="9" x2="9" y2="15" stroke="#DC2626" stroke-width="2" stroke-linecap="round"></line>
+</svg>
