@@ -462,22 +462,20 @@ const EntregasScreen = ({ navigation, route }) => {
               position: 'relative',
               borderRadius: 12
             }]}>
-              {/* Faixa lateral colorida baseada no status com cantos arredondados */}
+              {/* Faixa lateral de status com curvatura */}
               <View style={{
                 position: 'absolute',
                 left: 0,
                 top: 0,
                 bottom: 0,
-                width: 12,
+                width: 6,
                 backgroundColor: getStatusBorderColor(entrega.status),
                 borderTopLeftRadius: 12,
-                borderBottomLeftRadius: 12,
-                borderTopRightRadius: 0,
-                borderBottomRightRadius: 0
+                borderBottomLeftRadius: 12
               }} />
               
               {/* Conteúdo do card */}
-              <View style={{ flex: 1, paddingLeft: 20 }}>
+              <View style={{ flex: 1, paddingLeft: 16 }}>
                 <View style={styles.listItemHeader}>
                   <View style={styles.row}>
                     <SvgIcon 
