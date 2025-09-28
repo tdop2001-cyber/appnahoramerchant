@@ -64,11 +64,11 @@ const ConfiguracoesScreen = ({ navigation }) => {
       <ScrollView showsVerticalScrollIndicator={false}>
         {/* Informações do Restaurante */}
         <View style={styles.card}>
-          <View style={styles.row}>
+          <View style={[styles.row, { alignItems: 'center', marginBottom: 12 }]}>
             <SvgIcon name="home" size={20} color={colors.primary} style={{ marginRight: 8 }} />
-            <Text style={styles.cardTitle}>Informações do Restaurante</Text>
+            <Text style={[styles.cardTitle, { marginBottom: 0 }]}>Informações do Restaurante</Text>
           </View>
-          <View style={{ marginTop: 16 }}>
+          <View style={{ marginTop: 4 }}>
             <View style={[styles.row, styles.spaceBetween, { marginBottom: 12 }]}>
               <Text style={styles.textSecondary}>Nome</Text>
               <Text style={styles.text}>{restauranteInfo.nome}</Text>
@@ -105,11 +105,11 @@ const ConfiguracoesScreen = ({ navigation }) => {
 
         {/* Configurações de Notificações */}
         <View style={styles.card}>
-          <View style={styles.row}>
+          <View style={[styles.row, { alignItems: 'center', marginBottom: 12 }]}>
             <SvgIcon name="bell" size={20} color={colors.primary} style={{ marginRight: 8 }} />
-            <Text style={styles.cardTitle}>Notificações</Text>
+            <Text style={[styles.cardTitle, { marginBottom: 0 }]}>Notificações</Text>
           </View>
-          <View style={{ marginTop: 16 }}>
+          <View style={{ marginTop: 4 }}>
             <View style={[styles.row, styles.spaceBetween, { marginBottom: 16 }]}>
               <View style={styles.flex1}>
                 <Text style={styles.text}>Notificações Push</Text>
@@ -160,11 +160,11 @@ const ConfiguracoesScreen = ({ navigation }) => {
 
         {/* Configurações de Aparência */}
         <View style={styles.card}>
-          <View style={styles.row}>
+          <View style={[styles.row, { alignItems: 'center', marginBottom: 12 }]}>
             <SvgIcon name="palette" size={20} color={colors.primary} style={{ marginRight: 8 }} />
-            <Text style={styles.cardTitle}>Aparência</Text>
+            <Text style={[styles.cardTitle, { marginBottom: 0 }]}>Aparência</Text>
           </View>
-          <View style={{ marginTop: 16 }}>
+          <View style={{ marginTop: 4 }}>
             <View style={[styles.row, styles.spaceBetween]}>
               <View style={styles.flex1}>
                 <Text style={styles.text}>Modo Escuro</Text>
@@ -185,11 +185,11 @@ const ConfiguracoesScreen = ({ navigation }) => {
 
         {/* Configurações de Conta */}
         <View style={styles.card}>
-          <View style={styles.row}>
+          <View style={[styles.row, { alignItems: 'center', marginBottom: 12 }]}>
             <SvgIcon name="user" size={20} color={colors.primary} style={{ marginRight: 8 }} />
-            <Text style={styles.cardTitle}>Conta</Text>
+            <Text style={[styles.cardTitle, { marginBottom: 0 }]}>Conta</Text>
           </View>
-          <View style={{ marginTop: 16 }}>
+          <View style={{ marginTop: 4 }}>
             <TouchableOpacity 
               style={[styles.row, styles.spaceBetween, { marginBottom: 16 }]}
               onPress={() => navigation.navigate('AlterarSenha')}
@@ -264,11 +264,11 @@ const ConfiguracoesScreen = ({ navigation }) => {
 
         {/* Ações da Conta */}
         <View style={styles.card}>
-          <View style={styles.row}>
+          <View style={[styles.row, { alignItems: 'center', marginBottom: 12 }]}>
             <SvgIcon name="warning" size={20} color={colors.destructive || '#FF4500'} style={{ marginRight: 8 }} />
-            <Text style={styles.cardTitle}>Ações da Conta</Text>
+            <Text style={[styles.cardTitle, { marginBottom: 0 }]}>Ações da Conta</Text>
           </View>
-          <View style={{ marginTop: 16 }}>
+          <View style={{ marginTop: 4 }}>
             <TouchableOpacity
               style={[styles.button, styles.buttonSecondary, { marginBottom: 12 }]}
               onPress={handleLogout}
@@ -293,11 +293,11 @@ const ConfiguracoesScreen = ({ navigation }) => {
 
         {/* Informações do App */}
         <View style={styles.card}>
-          <View style={styles.row}>
+          <View style={[styles.row, { alignItems: 'center', marginBottom: 12 }]}>
             <SvgIcon name="info" size={20} color={colors.primary} style={{ marginRight: 8 }} />
-            <Text style={styles.cardTitle}>Sobre o App</Text>
+            <Text style={[styles.cardTitle, { marginBottom: 0 }]}>Sobre o App</Text>
           </View>
-          <View style={{ marginTop: 16 }}>
+          <View style={{ marginTop: 4 }}>
             <View style={[styles.row, styles.spaceBetween, { marginBottom: 12 }]}>
               <Text style={styles.textSecondary}>Versão</Text>
               <Text style={styles.text}>1.0.0</Text>

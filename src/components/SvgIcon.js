@@ -380,7 +380,7 @@ const iconComponents = {
   navigation: LocationIcon,
   pin: LocationIcon,
   info: InfoIcon,
-  bell: InfoIcon,
+  bell: BellIcon,
   notification: InfoIcon,
   palette: SettingsIcon,
   theme: SettingsIcon,
