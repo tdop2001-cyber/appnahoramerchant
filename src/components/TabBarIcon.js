@@ -15,8 +15,8 @@ const TabBarIcon = ({ route, focused, size = 24 }) => {
         return 'home';
       case 'Entregas':
         return 'box';
-      case 'Produtos':
-        return 'restaurant';
+      case 'Motoristas':
+        return 'truck';
       case 'Configurações':
         return 'settings';
       default:

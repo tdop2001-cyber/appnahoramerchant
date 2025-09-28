@@ -11,16 +11,14 @@ import { ThemeProvider, useTheme } from './src/contexts/ThemeContext';
 // Import screens
 import HomeScreen from './src/screens/HomeScreen';
 import EntregasScreen from './src/screens/EntregasScreen';
-import ProdutosScreen from './src/screens/ProdutosScreen';
+import MotoristasScreen from './src/screens/MotoristasScreen';
 import ConfiguracoesScreen from './src/screens/ConfiguracoesScreen';
 import GanhosScreen from './src/screens/GanhosScreen';
-import CriarProdutoScreen from './src/screens/CriarProdutoScreen';
-import EditarProdutoScreen from './src/screens/EditarProdutoScreen';
+import CadastroMotoristaScreen from './src/screens/CadastroMotoristaScreen';
+import EditarMotoristaScreen from './src/screens/EditarMotoristaScreen';
+import DetalhesMotoristaScreen from './src/screens/DetalhesMotoristaScreen';
 import NovaEntregaScreen from './src/screens/NovaEntregaScreen';
 import NovoPedidoScreen from './src/screens/NovoPedidoScreen';
-import CategoriasScreen from './src/screens/CategoriasScreen';
-import NovaCategoriaScreen from './src/screens/NovaCategoriaScreen';
-import EditarCategoriaScreen from './src/screens/EditarCategoriaScreen';
 import EntregaDetalhesScreen from './src/screens/EntregaDetalhesScreen';
 import EnderecosRetiradaScreen from './src/screens/EnderecosRetiradaScreen';
 import InformacoesRestauranteScreen from './src/screens/InformacoesRestauranteScreen';
@@ -97,11 +95,11 @@ function MainNavigator() {
             },
           }}
         />
-        <Tab.Screen 
-          name="Produtos" 
-          component={ProdutosStack}
+        <Tab.Screen
+          name="Motoristas"
+          component={MotoristasStack}
           options={{
-            tabBarLabel: 'Produtos',
+            tabBarLabel: 'Motoristas',
             tabBarLabelStyle: {
               fontSize: 12,
               fontWeight: '600',
@@ -125,15 +123,13 @@ function MainNavigator() {
   );
 }
 
-function ProdutosStack() {
+function MotoristasStack() {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="ProdutosList" component={ProdutosScreen} />
-      <Stack.Screen name="CriarProduto" component={CriarProdutoScreen} />
-      <Stack.Screen name="EditarProduto" component={EditarProdutoScreen} />
-      <Stack.Screen name="Categorias" component={CategoriasScreen} />
-      <Stack.Screen name="NovaCategoria" component={NovaCategoriaScreen} />
-      <Stack.Screen name="EditarCategoria" component={EditarCategoriaScreen} />
+      <Stack.Screen name="MotoristasList" component={MotoristasScreen} />
+      <Stack.Screen name="CadastroMotorista" component={CadastroMotoristaScreen} />
+      <Stack.Screen name="EditarMotorista" component={EditarMotoristaScreen} />
+      <Stack.Screen name="DetalhesMotorista" component={DetalhesMotoristaScreen} />
     </Stack.Navigator>
   );
 }
