@@ -30,7 +30,7 @@ const HomeScreen = () => {
 
   // Funções de navegação para os botões
   const handleNovoPedido = () => {
-    Alert.alert('Novo Pedido', 'Funcionalidade de novo pedido será implementada em breve!');
+    navigation.navigate('NovoPedido');
   };
 
   const handleVerPedidos = () => {

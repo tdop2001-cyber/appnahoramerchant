@@ -17,6 +17,7 @@ import GanhosScreen from './src/screens/GanhosScreen';
 import CriarProdutoScreen from './src/screens/CriarProdutoScreen';
 import EditarProdutoScreen from './src/screens/EditarProdutoScreen';
 import NovaEntregaScreen from './src/screens/NovaEntregaScreen';
+import NovoPedidoScreen from './src/screens/NovoPedidoScreen';
 import CategoriasScreen from './src/screens/CategoriasScreen';
 import NovaCategoriaScreen from './src/screens/NovaCategoriaScreen';
 import EditarCategoriaScreen from './src/screens/EditarCategoriaScreen';
@@ -142,6 +143,7 @@ function HomeStack() {
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="HomeList" component={HomeScreen} />
       <Stack.Screen name="NovaEntrega" component={NovaEntregaScreen} />
+      <Stack.Screen name="NovoPedido" component={NovoPedidoScreen} />
       <Stack.Screen name="Ganhos" component={GanhosScreen} />
     </Stack.Navigator>
   );
