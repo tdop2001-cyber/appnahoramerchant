@@ -222,7 +222,7 @@ const EntregasScreen = ({ navigation, route }) => {
   return (
     <SafeAreaWrapper>
       {/* Header */}
-      <View style={styles.header}>
+      <View style={[styles.header, { paddingVertical: 8, marginBottom: 8 }]}>
         <Text style={styles.headerTitle}>Entregas</Text>
         <Text style={styles.headerSubtitle}>
           Gerencie suas entregas ativas e histórico
@@ -230,20 +230,20 @@ const EntregasScreen = ({ navigation, route }) => {
       </View>
 
       {/* Tabs */}
-      <View style={[styles.row, { marginHorizontal: 16, marginBottom: 16 }]}>
+      <View style={[styles.row, { marginHorizontal: 16, marginBottom: 10, gap: 8 }]}>
         <TouchableOpacity
           style={[
             styles.button,
             activeTab === 'ativas' ? {} : styles.buttonSecondary,
-            { flex: 1, marginRight: 8 },
+            { flex: 1, paddingVertical: 8 },
           ]}
           onPress={() => setActiveTab('ativas')}
         >
           <View style={styles.row}>
-            <SvgIcon name="box" size={16} color={activeTab === 'ativas' ? colors.primaryText : colors.textSecondary} style={{ marginRight: 6 }} />
+            <SvgIcon name="box" size={14} color={activeTab === 'ativas' ? colors.primaryText : colors.textSecondary} style={{ marginRight: 4 }} />
             <Text
               style={[
-                activeTab === 'ativas' ? styles.buttonText : styles.buttonSecondaryText,
+                activeTab === 'ativas' ? styles.buttonText : styles.buttonSecondaryText
               ]}
             >
               Ativas ({entregasAtivas.length})
@@ -254,33 +254,31 @@ const EntregasScreen = ({ navigation, route }) => {
           style={[
             styles.button,
             activeTab === 'historico' ? {} : styles.buttonSecondary,
-            { flex: 1, marginLeft: 8 },
+            { flex: 1, paddingVertical: 8 },
           ]}
           onPress={() => setActiveTab('historico')}
         >
-          <Text
-            style={[
-              activeTab === 'historico' ? styles.buttonText : styles.buttonSecondaryText,
-            ]}
-          >
-            <View style={styles.row}>
-              <SvgIcon name="details" size={16} color={activeTab === 'historico' ? colors.primaryText : colors.textSecondary} style={{ marginRight: 6 }} />
-              <Text>Histórico ({entregasHistorico.length})</Text>
-            </View>
-          </Text>
+          <View style={styles.row}>
+            <SvgIcon name="details" size={14} color={activeTab === 'historico' ? colors.primaryText : colors.textSecondary} style={{ marginRight: 4 }} />
+            <Text style={[
+              activeTab === 'historico' ? styles.buttonText : styles.buttonSecondaryText
+            ]}>
+              Histórico ({entregasHistorico.length})
+            </Text>
+          </View>
         </TouchableOpacity>
       </View>
 
       {/* Busca */}
-      <View style={[styles.card, { marginBottom: 8, paddingVertical: 8, paddingHorizontal: 12 }]}>
+      <View style={[styles.card, { marginBottom: 6, paddingVertical: 6, paddingHorizontal: 10 }]}>
         <TextInput
           style={{
             backgroundColor: '#333333',
             borderRadius: 6,
-            padding: 8,
+            padding: 6,
             color: '#ffffff',
-            fontSize: 14,
-            minHeight: 36,
+            fontSize: 12,
+            minHeight: 32,
           }}
           placeholder="Buscar por cliente, endereço ou ID..."
           placeholderTextColor="#999999"
@@ -301,10 +299,10 @@ const EntregasScreen = ({ navigation, route }) => {
             styles.button,
             selectedStatus === 'todos' ? {} : styles.buttonSecondary,
             {
-              paddingVertical: 12,
+              paddingVertical: 6,
               paddingHorizontal: 16,
-              marginBottom: 12,
-              borderRadius: 8,
+              marginBottom: 10,
+              borderRadius: 6,
               justifyContent: 'center',
               alignItems: 'center',
             }
@@ -314,13 +312,12 @@ const EntregasScreen = ({ navigation, route }) => {
           <View style={styles.row}>
             <SvgIcon
               name="grid"
-              size={16}
+              size={14}
               color={selectedStatus === 'todos' ? colors.primaryText : colors.textSecondary}
-              style={{ marginRight: 8 }}
+              style={{ marginRight: 6 }}
             />
             <Text style={[
-              selectedStatus === 'todos' ? styles.buttonText : styles.buttonSecondaryText,
-              { fontSize: 14, fontWeight: '600' }
+              selectedStatus === 'todos' ? styles.buttonText : styles.buttonSecondaryText
             ]}>
               Todos ({getStatusCount('todos', activeTab === 'ativas' ? entregasAtivas : entregasHistorico)})
             </Text>
@@ -339,7 +336,7 @@ const EntregasScreen = ({ navigation, route }) => {
             <TouchableOpacity
               style={[
                 {
-                  paddingVertical: 10,
+                  paddingVertical: 6,
                   paddingHorizontal: 14,
                   marginRight: 8,
                   borderRadius: 20,
@@ -361,7 +358,7 @@ const EntregasScreen = ({ navigation, route }) => {
                   style={{ marginRight: 6 }}
                 />
                 <Text style={[
-                  { fontSize: 12, fontWeight: '600', textAlign: 'center' },
+                  { textAlign: 'center' },
                   selectedStatus === 'pending' ? { color: '#000000' } : { color: '#FFD700' }
                 ]}>
                   {getStatusCount('pending', activeTab === 'ativas' ? entregasAtivas : entregasHistorico)}
@@ -379,7 +376,7 @@ const EntregasScreen = ({ navigation, route }) => {
             <TouchableOpacity
               style={[
                 {
-                  paddingVertical: 10,
+                  paddingVertical: 6,
                   paddingHorizontal: 14,
                   marginRight: 8,
                   borderRadius: 20,
@@ -401,7 +398,7 @@ const EntregasScreen = ({ navigation, route }) => {
                   style={{ marginRight: 6 }}
                 />
                 <Text style={[
-                  { fontSize: 12, fontWeight: '600', textAlign: 'center' },
+                  { textAlign: 'center' },
                   selectedStatus === 'accepted' ? { color: '#ffffff' } : { color: '#9C27B0' }
                 ]}>
                   {getStatusCount('accepted', activeTab === 'ativas' ? entregasAtivas : entregasHistorico)}
@@ -419,7 +416,7 @@ const EntregasScreen = ({ navigation, route }) => {
             <TouchableOpacity
               style={[
                 {
-                  paddingVertical: 10,
+                  paddingVertical: 6,
                   paddingHorizontal: 14,
                   marginRight: 8,
                   borderRadius: 20,
@@ -441,7 +438,7 @@ const EntregasScreen = ({ navigation, route }) => {
                   style={{ marginRight: 6 }}
                 />
                 <Text style={[
-                  { fontSize: 12, fontWeight: '600', textAlign: 'center' },
+                  { textAlign: 'center' },
                   selectedStatus === 'picked' ? { color: '#ffffff' } : { color: '#2196F3' }
                 ]}>
                   {getStatusCount('picked', activeTab === 'ativas' ? entregasAtivas : entregasHistorico)}
@@ -459,7 +456,7 @@ const EntregasScreen = ({ navigation, route }) => {
             <TouchableOpacity
               style={[
                 {
-                  paddingVertical: 10,
+                  paddingVertical: 6,
                   paddingHorizontal: 14,
                   marginRight: 8,
                   borderRadius: 20,
@@ -481,7 +478,7 @@ const EntregasScreen = ({ navigation, route }) => {
                   style={{ marginRight: 6 }}
                 />
                 <Text style={[
-                  { fontSize: 12, fontWeight: '600', textAlign: 'center' },
+                  { textAlign: 'center' },
                   selectedStatus === 'delivered' ? { color: '#000000' } : { color: '#1ecb4f' }
                 ]}>
                   {getStatusCount('delivered', activeTab === 'ativas' ? entregasAtivas : entregasHistorico)}
@@ -499,7 +496,7 @@ const EntregasScreen = ({ navigation, route }) => {
             <TouchableOpacity
               style={[
                 {
-                  paddingVertical: 10,
+                  paddingVertical: 6,
                   paddingHorizontal: 14,
                   marginRight: 8,
                   borderRadius: 20,
@@ -521,7 +518,7 @@ const EntregasScreen = ({ navigation, route }) => {
                   style={{ marginRight: 6 }}
                 />
                 <Text style={[
-                  { fontSize: 12, fontWeight: '600', textAlign: 'center' },
+                  { textAlign: 'center' },
                   selectedStatus === 'cancelled' ? { color: '#ffffff' } : { color: '#FF4500' }
                 ]}>
                   {getStatusCount('cancelled', activeTab === 'ativas' ? entregasAtivas : entregasHistorico)}

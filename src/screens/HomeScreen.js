@@ -19,29 +19,38 @@ const HomeScreen = () => {
   const { isDarkMode, colors } = useTheme();
   const themeColors = isDarkMode ? colors.dark : colors.light;
   const navigation = useNavigation();
+  const [isRestaurantOpen, setIsRestaurantOpen] = useState(true);
 
   const stats = [
-    { title: 'Entregas Hoje', value: '12', status: 'available' },
-    { title: 'Ganhos Hoje', value: 'R$ 89,50', status: 'available' },
-    { title: 'Avaliação', value: '4.8', status: 'available' },
-    { title: 'Tempo Online', value: '6h 30m', status: 'available' },
+    { title: 'Pedidos Hoje', value: '12', status: 'available' },
+    { title: 'Faturamento Hoje', value: 'R$ 789,50', status: 'available' },
+    { title: 'Ticket Médio', value: 'R$ 65,80', status: 'available' },
+    { title: 'Tempo Médio Preparo', value: '18 min', status: 'available' },
   ];
 
   // Funções de navegação para os botões
-  const handleVerEntregas = () => {
-    navigation.navigate('Entregas');
+  const handleNovoPedido = () => {
+    Alert.alert('Novo Pedido', 'Funcionalidade de novo pedido será implementada em breve!');
   };
 
-  const handleGanhos = () => {
-    navigation.navigate('Ganhos');
+  const handleVerPedidos = () => {
+    navigation.navigate('Entregas', { initialTab: 'ativas' });
   };
 
-  const handleLocalizacao = () => {
-    Alert.alert('Localização', 'Funcionalidade de localização será implementada em breve!');
+  const handleGerenciarCardapio = () => {
+    navigation.navigate('Categorias');
   };
 
-  const handleConfiguracoes = () => {
-    navigation.navigate('Configurações');
+  const handleRelatorios = () => {
+    navigation.navigate('Relatórios');
+  };
+
+  const toggleRestaurantStatus = () => {
+    setIsRestaurantOpen(!isRestaurantOpen);
+    Alert.alert(
+      'Status do Restaurante',
+      `Restaurante ${!isRestaurantOpen ? 'aberto' : 'fechado'} com sucesso!`
+    );
   };
 
   return (
@@ -49,15 +58,39 @@ const HomeScreen = () => {
       <ScrollView style={[styles.container, { backgroundColor: themeColors.background }]}>
         {/* Header */}
         <View style={[styles.header, { backgroundColor: themeColors.surface, borderBottomColor: themeColors.border }]}>
-          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <Text style={[styles.headerTitle, { color: themeColors.text }]}>
-              Olá, João!
-            </Text>
-            <SvgIcon name="wave" size={24} color={themeColors.primary} style={{ marginLeft: 8 }} />
+          <View style={styles.headerTop}>
+            <View style={{ flex: 1 }}>
+              <Text style={[styles.headerTitle, { color: themeColors.text }]}>
+                Restaurante VaiJá
+              </Text>
+              <Text style={[styles.headerSubtitle, { color: themeColors.textSecondary }]}>
+                {isRestaurantOpen ? 'Recebendo pedidos' : 'Fechado para pedidos'}
+              </Text>
+            </View>
+
+            {/* Status Toggle */}
+            <TouchableOpacity
+              style={[
+                styles.statusToggle,
+                {
+                  backgroundColor: isRestaurantOpen ? '#1ecb4f' : '#FF4500',
+                  borderColor: isRestaurantOpen ? '#1ecb4f' : '#FF4500'
+                }
+              ]}
+              onPress={toggleRestaurantStatus}
+            >
+              <SvgIcon
+                name={isRestaurantOpen ? "check-circle" : "canceled"}
+                size={16}
+                color="#ffffff"
+                style={{ marginRight: 6 }}
+              />
+              <Text style={[styles.statusText, { color: '#ffffff' }]}>
+                {isRestaurantOpen ? 'ABERTO' : 'FECHADO'}
+              </Text>
+            </TouchableOpacity>
           </View>
-          <Text style={[styles.headerSubtitle, { color: themeColors.textSecondary }]}>
-            Pronto para suas entregas?
-          </Text>
+
         </View>
 
         {/* Estatísticas */}
@@ -82,31 +115,47 @@ const HomeScreen = () => {
           <Text style={[styles.sectionTitle, { color: themeColors.text }]}>
             Ações Rápidas
           </Text>
+
+          {/* Botão Novo Pedido - Destacado */}
+          <TouchableOpacity
+            style={[
+              styles.primaryActionButton,
+              {
+                backgroundColor: themeColors.primary,
+                marginBottom: 16
+              }
+            ]}
+            onPress={handleNovoPedido}
+          >
+            <SvgIcon name="plus-circle" size={24} color="#ffffff" />
+            <Text style={[styles.primaryActionText, { color: '#ffffff' }]}>Novo Pedido</Text>
+          </TouchableOpacity>
+
           <View style={styles.actionsGrid}>
-            <TouchableOpacity 
+            <TouchableOpacity
               style={[styles.actionButton, { backgroundColor: themeColors.surface, borderColor: themeColors.border }]}
-              onPress={handleVerEntregas}
+              onPress={handleVerPedidos}
             >
               <SvgIcon name="box" size={24} color={themeColors.primary} />
-              <Text style={[styles.actionText, { color: themeColors.text }]}>Ver Entregas</Text>
+              <Text style={[styles.actionText, { color: themeColors.text }]}>Ver Pedidos</Text>
             </TouchableOpacity>
-            <TouchableOpacity 
+            <TouchableOpacity
               style={[styles.actionButton, { backgroundColor: themeColors.surface, borderColor: themeColors.border }]}
-              onPress={handleGanhos}
+              onPress={handleGerenciarCardapio}
             >
-              <SvgIcon name="money" size={24} color={themeColors.primary} />
-              <Text style={[styles.actionText, { color: themeColors.text }]}>Ganhos</Text>
+              <SvgIcon name="grid" size={24} color={themeColors.primary} />
+              <Text style={[styles.actionText, { color: themeColors.text }]}>Cardápio</Text>
             </TouchableOpacity>
-            <TouchableOpacity 
+            <TouchableOpacity
               style={[styles.actionButton, { backgroundColor: themeColors.surface, borderColor: themeColors.border }]}
-              onPress={handleLocalizacao}
+              onPress={handleRelatorios}
             >
-              <SvgIcon name="location" size={24} color={themeColors.primary} />
-              <Text style={[styles.actionText, { color: themeColors.text }]}>Localização</Text>
+              <SvgIcon name="chart" size={24} color={themeColors.primary} />
+              <Text style={[styles.actionText, { color: themeColors.text }]}>Relatórios</Text>
             </TouchableOpacity>
-            <TouchableOpacity 
+            <TouchableOpacity
               style={[styles.actionButton, { backgroundColor: themeColors.surface, borderColor: themeColors.border }]}
-              onPress={handleConfiguracoes}
+              onPress={() => navigation.navigate('Configurações')}
             >
               <SvgIcon name="settings" size={24} color={themeColors.primary} />
               <Text style={[styles.actionText, { color: themeColors.text }]}>Configurações</Text>
@@ -129,6 +178,12 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     marginTop: 20, // Aumentado de 10 para 20
   },
+  headerTop: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 12,
+  },
   headerTitle: {
     fontSize: 24,
     fontWeight: 'bold',
@@ -137,6 +192,32 @@ const styles = StyleSheet.create({
   headerSubtitle: {
     fontSize: 14,
   },
+  statusToggle: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    borderRadius: 20,
+    borderWidth: 1,
+  },
+  statusText: {
+    fontSize: 12,
+    fontWeight: '700',
+  },
+  alertBanner: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    borderRadius: 8,
+    borderWidth: 1,
+    marginTop: 8,
+  },
+  alertText: {
+    fontSize: 14,
+    fontWeight: '600',
+    flex: 1,
+  },
   sectionTitle: {
     fontSize: 18,
     fontWeight: '600',
@@ -144,6 +225,7 @@ const styles = StyleSheet.create({
   },
   statsSection: {
     paddingHorizontal: 20,
+    marginTop: 20,
   },
   statsGrid: {
     flexDirection: 'row',
@@ -157,6 +239,26 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'space-between',
+  },
+  primaryActionButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 12,
+    padding: 16,
+    elevation: 3,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+  },
+  primaryActionText: {
+    fontSize: 16,
+    fontWeight: '700',
+    marginLeft: 8,
   },
   actionButton: {
     width: '48%',
