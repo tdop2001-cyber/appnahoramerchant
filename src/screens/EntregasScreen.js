@@ -203,6 +203,12 @@ const EntregasScreen = ({ navigation, route }) => {
   };
 
 
+  // Função para contar entregas por status
+  const getStatusCount = (status, entregas) => {
+    if (status === 'todos') return entregas.length;
+    return entregas.filter(entrega => entrega.status === status).length;
+  };
+
   // Função para filtrar entregas por status
   const getFilteredEntregas = (entregas) => {
     if (selectedStatus === 'todos') {
@@ -283,161 +289,253 @@ const EntregasScreen = ({ navigation, route }) => {
         />
       </View>
 
-      {/* Filtros por Status */}
-      <View style={[styles.card, { marginBottom: 12, paddingVertical: 8, paddingHorizontal: 12 }]}>
-        <Text style={[styles.text, { fontSize: 12, fontWeight: '600', marginBottom: 6 }]}>
+      {/* Filtros por Status - Melhorados */}
+      <View style={[styles.card, { marginBottom: 12, paddingVertical: 12, paddingHorizontal: 16 }]}>
+        <Text style={[styles.text, { fontSize: 14, fontWeight: '700', marginBottom: 12 }]}>
           Filtrar por Status
         </Text>
-        <View style={[styles.row, { flexWrap: 'nowrap', gap: 2 }]}>
-          <TouchableOpacity
-            style={[
-              styles.button,
-              selectedStatus === 'todos' ? {} : styles.buttonSecondary,
-              { 
-                paddingVertical: 3, 
-                paddingHorizontal: 6, 
-                minHeight: 24,
-                borderRadius: 6,
-                justifyContent: 'center',
-                alignItems: 'center',
-                flex: 1
-              }
-            ]}
-            onPress={() => setSelectedStatus('todos')}
-          >
+
+        {/* Botão "Todos" destacado */}
+        <TouchableOpacity
+          style={[
+            styles.button,
+            selectedStatus === 'todos' ? {} : styles.buttonSecondary,
+            {
+              paddingVertical: 12,
+              paddingHorizontal: 16,
+              marginBottom: 12,
+              borderRadius: 8,
+              justifyContent: 'center',
+              alignItems: 'center',
+            }
+          ]}
+          onPress={() => setSelectedStatus('todos')}
+        >
+          <View style={styles.row}>
+            <SvgIcon
+              name="grid"
+              size={16}
+              color={selectedStatus === 'todos' ? colors.primaryText : colors.textSecondary}
+              style={{ marginRight: 8 }}
+            />
             <Text style={[
               selectedStatus === 'todos' ? styles.buttonText : styles.buttonSecondaryText,
-              { fontSize: 9, textAlign: 'center' }
+              { fontSize: 14, fontWeight: '600' }
             ]}>
-              Todos
+              Todos ({getStatusCount('todos', activeTab === 'ativas' ? entregasAtivas : entregasHistorico)})
             </Text>
-          </TouchableOpacity>
-          
-          <TouchableOpacity
-            style={[
-              { 
-                paddingVertical: 3, 
-                paddingHorizontal: 6, 
-                minHeight: 24,
-                borderRadius: 6,
-                backgroundColor: selectedStatus === 'pending' ? '#FFD700' : 'transparent',
-                borderWidth: 1,
-                borderColor: '#FFD700',
-                justifyContent: 'center',
-                alignItems: 'center',
-                flex: 1
-              }
-            ]}
-            onPress={() => setSelectedStatus('pending')}
-          >
-            <Text style={[
-              { fontSize: 9, fontWeight: '600', textAlign: 'center' },
-              selectedStatus === 'pending' ? { color: '#000000' } : { color: '#FFD700' }
-            ]}>
-              Pendente
-            </Text>
-          </TouchableOpacity>
+          </View>
+        </TouchableOpacity>
 
-          <TouchableOpacity
-            style={[
-              { 
-                paddingVertical: 3, 
-                paddingHorizontal: 6, 
-                minHeight: 24,
-                borderRadius: 6,
-                backgroundColor: selectedStatus === 'accepted' ? '#9C27B0' : 'transparent',
-                borderWidth: 1,
-                borderColor: '#9C27B0',
-                justifyContent: 'center',
-                alignItems: 'center',
-                flex: 1
-              }
-            ]}
-            onPress={() => setSelectedStatus('accepted')}
-          >
-            <Text style={[
-              { fontSize: 9, fontWeight: '600', textAlign: 'center' },
-              selectedStatus === 'accepted' ? { color: '#ffffff' } : { color: '#9C27B0' }
-            ]}>
-              Aceito
-            </Text>
-          </TouchableOpacity>
+        {/* Filtros específicos em scroll horizontal */}
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          style={{ marginHorizontal: -4 }}
+          contentContainerStyle={{ paddingHorizontal: 4 }}
+        >
+          <View style={styles.row}>
+            {/* Pendente */}
+            <TouchableOpacity
+              style={[
+                {
+                  paddingVertical: 10,
+                  paddingHorizontal: 14,
+                  marginRight: 8,
+                  borderRadius: 20,
+                  backgroundColor: selectedStatus === 'pending' ? '#FFD700' : 'rgba(255, 215, 0, 0.1)',
+                  borderWidth: 1.5,
+                  borderColor: '#FFD700',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  minWidth: 80
+                }
+              ]}
+              onPress={() => setSelectedStatus('pending')}
+            >
+              <View style={[styles.row, { alignItems: 'center' }]}>
+                <SvgIcon
+                  name="hourglass"
+                  size={14}
+                  color={selectedStatus === 'pending' ? '#000000' : '#FFD700'}
+                  style={{ marginRight: 6 }}
+                />
+                <Text style={[
+                  { fontSize: 12, fontWeight: '600', textAlign: 'center' },
+                  selectedStatus === 'pending' ? { color: '#000000' } : { color: '#FFD700' }
+                ]}>
+                  {getStatusCount('pending', activeTab === 'ativas' ? entregasAtivas : entregasHistorico)}
+                </Text>
+              </View>
+              <Text style={[
+                { fontSize: 10, fontWeight: '500', textAlign: 'center', marginTop: 2 },
+                selectedStatus === 'pending' ? { color: '#000000' } : { color: '#FFD700' }
+              ]}>
+                Pendente
+              </Text>
+            </TouchableOpacity>
 
-          <TouchableOpacity
-            style={[
-              { 
-                paddingVertical: 3, 
-                paddingHorizontal: 6, 
-                minHeight: 24,
-                borderRadius: 6,
-                backgroundColor: selectedStatus === 'picked' ? '#2196F3' : 'transparent',
-                borderWidth: 1,
-                borderColor: '#2196F3',
-                justifyContent: 'center',
-                alignItems: 'center',
-                flex: 1
-              }
-            ]}
-            onPress={() => setSelectedStatus('picked')}
-          >
-            <Text style={[
-              { fontSize: 9, fontWeight: '600', textAlign: 'center' },
-              selectedStatus === 'picked' ? { color: '#ffffff' } : { color: '#2196F3' }
-            ]}>
-              Coletado
-            </Text>
-          </TouchableOpacity>
+            {/* Aceito */}
+            <TouchableOpacity
+              style={[
+                {
+                  paddingVertical: 10,
+                  paddingHorizontal: 14,
+                  marginRight: 8,
+                  borderRadius: 20,
+                  backgroundColor: selectedStatus === 'accepted' ? '#9C27B0' : 'rgba(156, 39, 176, 0.1)',
+                  borderWidth: 1.5,
+                  borderColor: '#9C27B0',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  minWidth: 80
+                }
+              ]}
+              onPress={() => setSelectedStatus('accepted')}
+            >
+              <View style={[styles.row, { alignItems: 'center' }]}>
+                <SvgIcon
+                  name="check-circle"
+                  size={14}
+                  color={selectedStatus === 'accepted' ? '#ffffff' : '#9C27B0'}
+                  style={{ marginRight: 6 }}
+                />
+                <Text style={[
+                  { fontSize: 12, fontWeight: '600', textAlign: 'center' },
+                  selectedStatus === 'accepted' ? { color: '#ffffff' } : { color: '#9C27B0' }
+                ]}>
+                  {getStatusCount('accepted', activeTab === 'ativas' ? entregasAtivas : entregasHistorico)}
+                </Text>
+              </View>
+              <Text style={[
+                { fontSize: 10, fontWeight: '500', textAlign: 'center', marginTop: 2 },
+                selectedStatus === 'accepted' ? { color: '#ffffff' } : { color: '#9C27B0' }
+              ]}>
+                Aceito
+              </Text>
+            </TouchableOpacity>
 
-          <TouchableOpacity
-            style={[
-              { 
-                paddingVertical: 3, 
-                paddingHorizontal: 6, 
-                minHeight: 24,
-                borderRadius: 6,
-                backgroundColor: selectedStatus === 'delivered' ? '#1ecb4f' : 'transparent',
-                borderWidth: 1,
-                borderColor: '#1ecb4f',
-                justifyContent: 'center',
-                alignItems: 'center',
-                flex: 1
-              }
-            ]}
-            onPress={() => setSelectedStatus('delivered')}
-          >
-            <Text style={[
-              { fontSize: 9, fontWeight: '600', textAlign: 'center' },
-              selectedStatus === 'delivered' ? { color: '#000000' } : { color: '#1ecb4f' }
-            ]}>
-              Entregue
-            </Text>
-          </TouchableOpacity>
+            {/* Coletado */}
+            <TouchableOpacity
+              style={[
+                {
+                  paddingVertical: 10,
+                  paddingHorizontal: 14,
+                  marginRight: 8,
+                  borderRadius: 20,
+                  backgroundColor: selectedStatus === 'picked' ? '#2196F3' : 'rgba(33, 150, 243, 0.1)',
+                  borderWidth: 1.5,
+                  borderColor: '#2196F3',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  minWidth: 80
+                }
+              ]}
+              onPress={() => setSelectedStatus('picked')}
+            >
+              <View style={[styles.row, { alignItems: 'center' }]}>
+                <SvgIcon
+                  name="box"
+                  size={14}
+                  color={selectedStatus === 'picked' ? '#ffffff' : '#2196F3'}
+                  style={{ marginRight: 6 }}
+                />
+                <Text style={[
+                  { fontSize: 12, fontWeight: '600', textAlign: 'center' },
+                  selectedStatus === 'picked' ? { color: '#ffffff' } : { color: '#2196F3' }
+                ]}>
+                  {getStatusCount('picked', activeTab === 'ativas' ? entregasAtivas : entregasHistorico)}
+                </Text>
+              </View>
+              <Text style={[
+                { fontSize: 10, fontWeight: '500', textAlign: 'center', marginTop: 2 },
+                selectedStatus === 'picked' ? { color: '#ffffff' } : { color: '#2196F3' }
+              ]}>
+                Coletado
+              </Text>
+            </TouchableOpacity>
 
-          <TouchableOpacity
-            style={[
-              { 
-                paddingVertical: 3, 
-                paddingHorizontal: 6, 
-                minHeight: 24,
-                borderRadius: 6,
-                backgroundColor: selectedStatus === 'cancelled' ? '#FF4500' : 'transparent',
-                borderWidth: 1,
-                borderColor: '#FF4500',
-                justifyContent: 'center',
-                alignItems: 'center',
-                flex: 1
-              }
-            ]}
-            onPress={() => setSelectedStatus('cancelled')}
-          >
-            <Text style={[
-              { fontSize: 9, fontWeight: '600', textAlign: 'center' },
-              selectedStatus === 'cancelled' ? { color: '#ffffff' } : { color: '#FF4500' }
-            ]}>
-              Cancelado
-            </Text>
-          </TouchableOpacity>
-        </View>
+            {/* Entregue */}
+            <TouchableOpacity
+              style={[
+                {
+                  paddingVertical: 10,
+                  paddingHorizontal: 14,
+                  marginRight: 8,
+                  borderRadius: 20,
+                  backgroundColor: selectedStatus === 'delivered' ? '#1ecb4f' : 'rgba(30, 203, 79, 0.1)',
+                  borderWidth: 1.5,
+                  borderColor: '#1ecb4f',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  minWidth: 80
+                }
+              ]}
+              onPress={() => setSelectedStatus('delivered')}
+            >
+              <View style={[styles.row, { alignItems: 'center' }]}>
+                <SvgIcon
+                  name="champions"
+                  size={14}
+                  color={selectedStatus === 'delivered' ? '#000000' : '#1ecb4f'}
+                  style={{ marginRight: 6 }}
+                />
+                <Text style={[
+                  { fontSize: 12, fontWeight: '600', textAlign: 'center' },
+                  selectedStatus === 'delivered' ? { color: '#000000' } : { color: '#1ecb4f' }
+                ]}>
+                  {getStatusCount('delivered', activeTab === 'ativas' ? entregasAtivas : entregasHistorico)}
+                </Text>
+              </View>
+              <Text style={[
+                { fontSize: 10, fontWeight: '500', textAlign: 'center', marginTop: 2 },
+                selectedStatus === 'delivered' ? { color: '#000000' } : { color: '#1ecb4f' }
+              ]}>
+                Entregue
+              </Text>
+            </TouchableOpacity>
+
+            {/* Cancelado */}
+            <TouchableOpacity
+              style={[
+                {
+                  paddingVertical: 10,
+                  paddingHorizontal: 14,
+                  marginRight: 8,
+                  borderRadius: 20,
+                  backgroundColor: selectedStatus === 'cancelled' ? '#FF4500' : 'rgba(255, 69, 0, 0.1)',
+                  borderWidth: 1.5,
+                  borderColor: '#FF4500',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  minWidth: 80
+                }
+              ]}
+              onPress={() => setSelectedStatus('cancelled')}
+            >
+              <View style={[styles.row, { alignItems: 'center' }]}>
+                <SvgIcon
+                  name="canceled"
+                  size={14}
+                  color={selectedStatus === 'cancelled' ? '#ffffff' : '#FF4500'}
+                  style={{ marginRight: 6 }}
+                />
+                <Text style={[
+                  { fontSize: 12, fontWeight: '600', textAlign: 'center' },
+                  selectedStatus === 'cancelled' ? { color: '#ffffff' } : { color: '#FF4500' }
+                ]}>
+                  {getStatusCount('cancelled', activeTab === 'ativas' ? entregasAtivas : entregasHistorico)}
+                </Text>
+              </View>
+              <Text style={[
+                { fontSize: 10, fontWeight: '500', textAlign: 'center', marginTop: 2 },
+                selectedStatus === 'cancelled' ? { color: '#ffffff' } : { color: '#FF4500' }
+              ]}>
+                Cancelado
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </ScrollView>
       </View>
 
       <ScrollView showsVerticalScrollIndicator={false}>
