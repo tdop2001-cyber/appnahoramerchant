@@ -142,15 +142,15 @@ const MotoristasScreen = ({ navigation }) => {
       <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
         {/* Header */}
         <View style={styles.header}>
-          <Text style={styles.headerTitle}>Motoristas</Text>
+          <Text style={styles.headerTitle}>Motoristas Parceiros</Text>
           <Text style={styles.headerSubtitle}>
-            Gerencie sua equipe de entregadores
+            Acompanhe os motoristas disponíveis na sua região
           </Text>
         </View>
 
         {/* Resumo */}
         <View style={styles.card}>
-          <Text style={styles.cardTitle}>Resumo da Equipe</Text>
+          <Text style={styles.cardTitle}>Motoristas Disponíveis</Text>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 12 }}>
             <View style={{ alignItems: 'center', flex: 1 }}>
               <Text style={[styles.text, { fontSize: 24, fontWeight: 'bold', color: '#1ecb4f' }]}>
@@ -355,15 +355,16 @@ const MotoristasScreen = ({ navigation }) => {
           </ScrollView>
         </View>
 
-        {/* Botão Cadastrar Motorista */}
+        {/* Informativo sobre Parcerias */}
         <View style={[styles.card, { marginBottom: 12 }]}>
-          <TouchableOpacity
-            style={[styles.button, { flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }]}
-            onPress={() => navigation.navigate('CadastroMotorista')}
-          >
-            <SvgIcon name="plus-circle" size={20} color={colors.primaryText} style={{ marginRight: 8 }} />
-            <Text style={styles.buttonText}>Cadastrar Novo Motorista</Text>
-          </TouchableOpacity>
+          <View style={[styles.row, { alignItems: 'center', marginBottom: 8 }]}>
+            <SvgIcon name="info" size={16} color={colors.primary} style={{ marginRight: 8 }} />
+            <Text style={[styles.text, { fontWeight: '600' }]}>Motoristas Parceiros</Text>
+          </View>
+          <Text style={[styles.textSecondary, { fontSize: 12 }]}>
+            Motoristas autônomos que se oferecem para fazer entregas na sua região.
+            Eles podem aceitar ou recusar suas solicitações de entrega.
+          </Text>
         </View>
 
         {/* Lista de Motoristas */}

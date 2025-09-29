@@ -62,27 +62,6 @@ const DetalhesMotoristaScreen = ({ navigation, route }) => {
 
   const statusColor = getStatusColor(motorista.status);
 
-  const handleEditarMotorista = () => {
-    navigation.navigate('EditarMotorista', { motorista });
-  };
-
-  const handleRemoverMotorista = () => {
-    Alert.alert(
-      '⚠️ Remover Motorista',
-      `Tem certeza que deseja remover ${motorista.nome} da sua equipe?`,
-      [
-        { text: 'Cancelar', style: 'cancel' },
-        {
-          text: 'Remover',
-          style: 'destructive',
-          onPress: () => {
-            Alert.alert('✅ Removido', 'Motorista removido com sucesso!');
-            navigation.goBack();
-          }
-        }
-      ]
-    );
-  };
 
   return (
     <SafeAreaWrapper>
@@ -206,34 +185,23 @@ const DetalhesMotoristaScreen = ({ navigation, route }) => {
 
         {/* Ações */}
         <View style={styles.card}>
-          <View style={{ flexDirection: 'row', gap: 12, marginBottom: 12 }}>
-            <TouchableOpacity
-              style={[styles.button, { flex: 1 }]}
-              onPress={handleEditarMotorista}
-            >
-              <View style={styles.row}>
-                <SvgIcon name="edit" size={16} color={colors.primaryText} style={{ marginRight: 6 }} />
-                <Text style={styles.buttonText}>Editar</Text>
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[styles.button, styles.buttonSecondary, { flex: 1 }]}
-              onPress={() => Alert.alert('Em breve', 'Histórico de entregas será implementado!')}
-            >
-              <View style={styles.row}>
-                <SvgIcon name="details" size={16} color={colors.textSecondary} style={{ marginRight: 6 }} />
-                <Text style={styles.buttonSecondaryText}>Histórico</Text>
-              </View>
-            </TouchableOpacity>
-          </View>
-
           <TouchableOpacity
-            style={[styles.button, { backgroundColor: '#FF4500', borderColor: '#FF4500' }]}
-            onPress={handleRemoverMotorista}
+            style={[styles.button, { marginBottom: 12 }]}
+            onPress={() => Alert.alert('Em breve', 'Histórico de parcerias será implementado!')}
           >
             <View style={styles.row}>
-              <SvgIcon name="trash" size={16} color="#ffffff" style={{ marginRight: 6 }} />
-              <Text style={[styles.buttonText, { color: '#ffffff' }]}>Remover Motorista</Text>
+              <SvgIcon name="details" size={16} color={colors.primaryText} style={{ marginRight: 6 }} />
+              <Text style={styles.buttonText}>Ver Histórico de Entregas</Text>
+            </View>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={[styles.button, styles.buttonSecondary]}
+            onPress={() => Alert.alert('Contato', `Entre em contato com ${motorista.nome} pelo telefone ${motorista.telefone}`)}
+          >
+            <View style={styles.row}>
+              <SvgIcon name="phone" size={16} color={colors.textSecondary} style={{ marginRight: 6 }} />
+              <Text style={styles.buttonSecondaryText}>Entrar em Contato</Text>
             </View>
           </TouchableOpacity>
         </View>

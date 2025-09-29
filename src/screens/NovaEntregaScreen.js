@@ -271,13 +271,25 @@ const NovaEntregaScreen = ({ navigation }) => {
     { id: 'outro', nome: 'Outro', emoji: '📋' },
   ]);
 
-  // Tamanhos de pacote disponíveis
+  // Tamanhos de pacote disponíveis (seguindo modelo NaHora!)
   const [tamanhosPacote] = useState([
-    { id: 'pequeno', nome: 'Pequeno', emoji: '🔸' },
-    { id: 'medio', nome: 'Médio', emoji: '🔹' },
-    { id: 'grande', nome: 'Grande', emoji: '🔶' },
-    { id: 'extra_grande', nome: 'Extra Grande', emoji: '🔷' },
+    { id: 'pequeno', nome: 'Pequeno', emoji: '🔸', multiplicador: 1.0 },
+    { id: 'medio', nome: 'Médio', emoji: '🔹', multiplicador: 1.5 },
+    { id: 'grande', nome: 'Grande', emoji: '🔶', multiplicador: 2.0 },
   ]);
+
+  // Configuração de precificação dinâmica (modelo NaHora!)
+  const [precificacao] = useState({
+    tarifaBase: 8.00,
+    precoPorKm: 1.50,
+    taxaPlataforma: 0.15, // 15% para plataforma
+    horarioPicoMultiplicador: 1.10, // +10% em horário de pico
+  });
+
+  // Estados para precificação
+  const [distanciaEstimada, setDistanciaEstimada] = useState(0);
+  const [precoCalculado, setPrecoCalculado] = useState(null);
+  const [isHorarioPico, setIsHorarioPico] = useState(false);
 
   // Estados para filtros e busca
   const [filtroCategoria, setFiltroCategoria] = useState('todos');
@@ -407,18 +419,68 @@ const NovaEntregaScreen = ({ navigation }) => {
     return formData.itensPedido.reduce((total, item) => total + (item.preco * item.quantidade), 0);
   };
 
+  // Função de precificação dinâmica (modelo NaHora!)
+  const calcularTaxaEntrega = (distancia, categoriaTamanho) => {
+    if (!distancia || !categoriaTamanho) return null;
+
+    const tamanho = tamanhosPacote.find(t => t.id === categoriaTamanho);
+    if (!tamanho) return null;
+
+    // Cálculo base: tarifa inicial + preço por km
+    let taxaEntrega = precificacao.tarifaBase + (distancia * precificacao.precoPorKm);
+
+    // Aplicar multiplicador de categoria
+    taxaEntrega *= tamanho.multiplicador;
+
+    // Aplicar multiplicador de horário de pico
+    if (isHorarioPico) {
+      taxaEntrega *= precificacao.horarioPicoMultiplicador;
+    }
+
+    // Arredondar para 2 casas decimais
+    taxaEntrega = Math.round(taxaEntrega * 100) / 100;
+
+    // Calcular split (15% plataforma / 85% entregador)
+    const totalProdutos = calcularTotalPedido();
+    const totalGeral = totalProdutos + taxaEntrega;
+    const taxaPlataforma = totalGeral * precificacao.taxaPlataforma;
+    const ganhoEntregador = totalGeral - taxaPlataforma;
+
+    return {
+      taxaEntrega,
+      totalProdutos,
+      totalGeral,
+      taxaPlataforma: Math.round(taxaPlataforma * 100) / 100,
+      ganhoEntregador: Math.round(ganhoEntregador * 100) / 100,
+      distancia,
+      categoria: tamanho.nome,
+      horarioPico: isHorarioPico
+    };
+  };
+
+  // Atualizar cálculo quando distância ou tamanho mudar
+  React.useEffect(() => {
+    if (distanciaEstimada > 0 && tamanhoPacoteSelecionado) {
+      const preco = calcularTaxaEntrega(distanciaEstimada, tamanhoPacoteSelecionado);
+      setPrecoCalculado(preco);
+      if (preco) {
+        handleInputChange('valorEntrega', preco.taxaEntrega.toString());
+      }
+    }
+  }, [distanciaEstimada, tamanhoPacoteSelecionado, isHorarioPico]);
+
   // Função para calcular valor final com desconto/acréscimo
   const calcularValorFinal = () => {
     const totalProdutos = calcularTotalPedido();
     const valorEntrega = parseFloat(formData.valorEntrega) || 0;
     const valorBase = totalProdutos + valorEntrega;
-    
+
     if (!formData.tipoAjuste || (!formData.valorAjuste && !formData.percentualAjuste)) {
       return valorBase;
     }
-    
+
     let valorAjuste = 0;
-    
+
     if (formData.percentualAjuste) {
       // Calcular baseado em percentual
       const percentual = parseFloat(formData.percentualAjuste) / 100;
@@ -427,13 +489,13 @@ const NovaEntregaScreen = ({ navigation }) => {
       // Calcular baseado em valor fixo
       valorAjuste = parseFloat(formData.valorAjuste);
     }
-    
+
     if (formData.tipoAjuste === 'desconto') {
       return Math.max(0, valorBase - valorAjuste);
     } else if (formData.tipoAjuste === 'acrescimo') {
       return valorBase + valorAjuste;
     }
-    
+
     return valorBase;
   };
 
@@ -1518,24 +1580,162 @@ const NovaEntregaScreen = ({ navigation }) => {
           </Text>
         </View>
 
-        {/* Valor da Entrega */}
+        {/* Valor da Entrega - Precificação Dinâmica */}
         <View style={styles.card}>
-          <Text style={styles.cardTitle}>Valor da Entrega</Text>
-          
+          <Text style={styles.cardTitle}>💰 Precificação Dinâmica</Text>
+          <Text style={[styles.textSecondary, { fontSize: 12, marginBottom: 16 }]}>
+            Calcule automaticamente o valor da entrega baseado na distância e categoria
+          </Text>
+
+          {/* Distância Estimada */}
           <View style={{ marginBottom: 16 }}>
             <Text style={[styles.text, { marginBottom: 8, fontWeight: '600' }]}>
-              Valor (opcional)
+              Distância Estimada (km)
+            </Text>
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <TextInput
+                style={[styles.input, { flex: 1 }]}
+                placeholder="Ex: 5"
+                placeholderTextColor={colors.textSecondary}
+                value={distanciaEstimada > 0 ? distanciaEstimada.toString() : ''}
+                onChangeText={(value) => setDistanciaEstimada(parseFloat(value) || 0)}
+                keyboardType="numeric"
+              />
+              <Text style={[styles.text, { marginLeft: 8 }]}>km</Text>
+            </View>
+            <Text style={[styles.textSecondary, { fontSize: 11, marginTop: 4 }]}>
+              Base: R$ {precificacao.tarifaBase.toFixed(2)} + R$ {precificacao.precoPorKm.toFixed(2)}/km
+            </Text>
+          </View>
+
+          {/* Horário de Pico */}
+          <View style={{ marginBottom: 16 }}>
+            <TouchableOpacity
+              style={[
+                styles.button,
+                isHorarioPico ? {} : styles.buttonSecondary,
+                { flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }
+              ]}
+              onPress={() => setIsHorarioPico(!isHorarioPico)}
+            >
+              <Text style={isHorarioPico ? styles.buttonText : styles.buttonSecondaryText}>
+                {isHorarioPico ? '⚡ Horário de Pico (+10%)' : '🕐 Horário Normal'}
+              </Text>
+            </TouchableOpacity>
+            <Text style={[styles.textSecondary, { fontSize: 11, marginTop: 4, textAlign: 'center' }]}>
+              Horário de pico: 11h-14h e 18h-21h
+            </Text>
+          </View>
+
+          {/* Preview do Cálculo */}
+          {precoCalculado && (
+            <View style={[
+              {
+                backgroundColor: 'rgba(255, 115, 0, 0.1)',
+                borderRadius: 8,
+                padding: 16,
+                borderWidth: 1,
+                borderColor: 'rgba(255, 115, 0, 0.3)',
+                marginBottom: 16
+              }
+            ]}>
+              <Text style={[styles.text, { fontWeight: 'bold', marginBottom: 12, fontSize: 16 }]}>
+                📊 Resumo da Precificação
+              </Text>
+
+              <View style={[styles.row, styles.spaceBetween, { marginBottom: 6 }]}>
+                <Text style={[styles.text, { fontSize: 14 }]}>Distância:</Text>
+                <Text style={[styles.text, { fontSize: 14 }]}>{precoCalculado.distancia} km</Text>
+              </View>
+
+              <View style={[styles.row, styles.spaceBetween, { marginBottom: 6 }]}>
+                <Text style={[styles.text, { fontSize: 14 }]}>Categoria:</Text>
+                <Text style={[styles.text, { fontSize: 14 }]}>{precoCalculado.categoria}</Text>
+              </View>
+
+              <View style={[styles.row, styles.spaceBetween, { marginBottom: 6 }]}>
+                <Text style={[styles.text, { fontSize: 14 }]}>Taxa de Entrega:</Text>
+                <Text style={[styles.textPrimary, { fontSize: 14, fontWeight: 'bold' }]}>
+                  R$ {precoCalculado.taxaEntrega.toFixed(2)}
+                </Text>
+              </View>
+
+              <View style={[styles.row, styles.spaceBetween, { marginBottom: 6 }]}>
+                <Text style={[styles.text, { fontSize: 14 }]}>Produtos:</Text>
+                <Text style={[styles.text, { fontSize: 14 }]}>
+                  R$ {precoCalculado.totalProdutos.toFixed(2)}
+                </Text>
+              </View>
+
+              <View style={[
+                styles.row,
+                styles.spaceBetween,
+                {
+                  paddingTop: 8,
+                  marginTop: 8,
+                  borderTopWidth: 1,
+                  borderTopColor: 'rgba(255, 115, 0, 0.3)',
+                  marginBottom: 12
+                }
+              ]}>
+                <Text style={[styles.text, { fontSize: 16, fontWeight: 'bold' }]}>Total:</Text>
+                <Text style={[styles.textPrimary, { fontSize: 16, fontWeight: 'bold' }]}>
+                  R$ {precoCalculado.totalGeral.toFixed(2)}
+                </Text>
+              </View>
+
+              {/* Split Financeiro (15% plataforma / 85% entregador) */}
+              <View style={[
+                {
+                  backgroundColor: colors.surface,
+                  borderRadius: 6,
+                  padding: 12,
+                  marginTop: 8
+                }
+              ]}>
+                <Text style={[styles.text, { fontWeight: '600', marginBottom: 8, fontSize: 13 }]}>
+                  💸 Split Financeiro (Modelo NaHora!)
+                </Text>
+
+                <View style={[styles.row, styles.spaceBetween, { marginBottom: 4 }]}>
+                  <Text style={[styles.textSecondary, { fontSize: 12 }]}>
+                    Taxa Plataforma (15%):
+                  </Text>
+                  <Text style={[styles.textSecondary, { fontSize: 12, fontWeight: '600' }]}>
+                    R$ {precoCalculado.taxaPlataforma.toFixed(2)}
+                  </Text>
+                </View>
+
+                <View style={[styles.row, styles.spaceBetween]}>
+                  <Text style={[styles.text, { fontSize: 12, color: '#1ecb4f' }]}>
+                    Ganho Entregador (85%):
+                  </Text>
+                  <Text style={[styles.text, { fontSize: 12, fontWeight: '600', color: '#1ecb4f' }]}>
+                    R$ {precoCalculado.ganhoEntregador.toFixed(2)}
+                  </Text>
+                </View>
+              </View>
+            </View>
+          )}
+
+          {/* Valor Manual (Opcional) */}
+          <View style={{ marginBottom: 0 }}>
+            <Text style={[styles.text, { marginBottom: 8, fontWeight: '600' }]}>
+              Ou defina valor manualmente
             </Text>
             <TextInput
               style={styles.input}
               placeholder="Ex: 15,00"
               placeholderTextColor={colors.textSecondary}
               value={formData.valorEntrega}
-              onChangeText={(value) => handleInputChange('valorEntrega', value)}
+              onChangeText={(value) => {
+                handleInputChange('valorEntrega', value);
+                setPrecoCalculado(null); // Limpar cálculo automático
+              }}
               keyboardType="numeric"
             />
-            <Text style={[styles.textSecondary, { fontSize: 12, marginTop: 4 }]}>
-              Deixe em branco para usar o valor padrão baseado na distância
+            <Text style={[styles.textSecondary, { fontSize: 11, marginTop: 4 }]}>
+              Deixe em branco para usar precificação automática
             </Text>
           </View>
         </View>

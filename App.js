@@ -14,8 +14,6 @@ import EntregasScreen from './src/screens/EntregasScreen';
 import MotoristasScreen from './src/screens/MotoristasScreen';
 import ConfiguracoesScreen from './src/screens/ConfiguracoesScreen';
 import GanhosScreen from './src/screens/GanhosScreen';
-import CadastroMotoristaScreen from './src/screens/CadastroMotoristaScreen';
-import EditarMotoristaScreen from './src/screens/EditarMotoristaScreen';
 import DetalhesMotoristaScreen from './src/screens/DetalhesMotoristaScreen';
 import NovaEntregaScreen from './src/screens/NovaEntregaScreen';
 import NovoPedidoScreen from './src/screens/NovoPedidoScreen';
@@ -127,8 +125,6 @@ function MotoristasStack() {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="MotoristasList" component={MotoristasScreen} />
-      <Stack.Screen name="CadastroMotorista" component={CadastroMotoristaScreen} />
-      <Stack.Screen name="EditarMotorista" component={EditarMotoristaScreen} />
       <Stack.Screen name="DetalhesMotorista" component={DetalhesMotoristaScreen} />
     </Stack.Navigator>
   );

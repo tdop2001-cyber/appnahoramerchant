@@ -82,11 +82,24 @@ const GanhosScreen = () => {
 
   const dadosAtuais = ganhosPorPeriodo[selectedPeriod];
 
+  // Modelo NaHora!: 15% plataforma / 85% entregador
+  const calcularSplitNaHora = (total) => {
+    const totalNum = parseFloat(total.replace('R$ ', '').replace(',', '.'));
+    const taxaPlataforma = totalNum * 0.15; // 15%
+    const ganhoEntregador = totalNum * 0.85; // 85%
+    return {
+      taxaPlataforma: taxaPlataforma.toFixed(2).replace('.', ','),
+      ganhoEntregador: ganhoEntregador.toFixed(2).replace('.', ',')
+    };
+  };
+
+  const splitFinanceiro = calcularSplitNaHora(dadosAtuais.total);
+
   const stats = [
     { title: 'Ganho Total', value: dadosAtuais.total, status: 'available' },
     { title: 'Entregas', value: dadosAtuais.entregas, status: 'available' },
     { title: 'Média/Entrega', value: dadosAtuais.media, status: 'available' },
-    { title: 'Comissão (20%)', value: dadosAtuais.comissao, status: 'busy' },
+    { title: 'Taxa Plataforma (15%)', value: `R$ ${splitFinanceiro.taxaPlataforma}`, status: 'busy' },
   ];
 
   return (
@@ -199,8 +212,12 @@ const GanhosScreen = () => {
           </View>
         </View>
 
-        {/* Resumo Final */}
+        {/* Resumo Final - Modelo NaHora! (15% / 85%) */}
         <View style={[styles.summarySection, { backgroundColor: themeColors.surface, borderColor: themeColors.border }]}>
+          <Text style={[styles.summaryTitle, { color: themeColors.text, marginBottom: 16 }]}>
+            💰 Split Financeiro (Modelo NaHora!)
+          </Text>
+
           <View style={styles.summaryRow}>
             <Text style={[styles.summaryLabel, { color: themeColors.text }]}>
               Ganho Bruto:
@@ -209,21 +226,39 @@ const GanhosScreen = () => {
               {dadosAtuais.total}
             </Text>
           </View>
+
           <View style={styles.summaryRow}>
             <Text style={[styles.summaryLabel, { color: themeColors.text }]}>
-              Comissão (20%):
+              Taxa Plataforma (15%):
             </Text>
             <Text style={[styles.summaryValue, { color: themeColors.error }]}>
-              -{dadosAtuais.comissao}
+              -R$ {splitFinanceiro.taxaPlataforma}
             </Text>
           </View>
+
           <View style={[styles.summaryRow, styles.summaryTotal]}>
             <Text style={[styles.summaryLabelTotal, { color: themeColors.text }]}>
-              Ganho Líquido:
+              Ganho Entregador (85%):
             </Text>
             <Text style={[styles.summaryValueTotal, { color: themeColors.primary }]}>
-              R$ {(parseFloat(dadosAtuais.total.replace('R$ ', '').replace(',', '.')) -
-                   parseFloat(dadosAtuais.comissao.replace('R$ ', '').replace(',', '.'))).toFixed(2).replace('.', ',')}
+              R$ {splitFinanceiro.ganhoEntregador}
+            </Text>
+          </View>
+
+          {/* Informação adicional */}
+          <View style={[
+            {
+              backgroundColor: 'rgba(255, 115, 0, 0.1)',
+              borderRadius: 8,
+              padding: 12,
+              marginTop: 16,
+              borderWidth: 1,
+              borderColor: 'rgba(255, 115, 0, 0.3)'
+            }
+          ]}>
+            <Text style={[styles.summaryLabel, { color: themeColors.text, fontSize: 12 }]}>
+              ℹ️ O modelo NaHora! repassa 85% do valor total para o entregador,
+              retendo apenas 15% como taxa da plataforma.
             </Text>
           </View>
         </View>
@@ -357,6 +392,10 @@ const styles = StyleSheet.create({
   },
   summaryValueTotal: {
     fontSize: 20,
+    fontWeight: 'bold',
+  },
+  summaryTitle: {
+    fontSize: 16,
     fontWeight: 'bold',
   },
 });

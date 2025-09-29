@@ -20,15 +20,42 @@ const CadastroMotoristaScreen = ({ navigation }) => {
   const [formData, setFormData] = useState({
     nome: '',
     telefone: '',
+    email: '',
     cpf: '',
     cnh: '',
+    // Tipo de veículo (modelo NaHora!)
+    tipoVeiculo: '', // 'bike', 'moto', 'car'
     veiculo: '',
     placa: '',
     cor: '',
     ano: '',
     endereco: '',
+    // Documentos (modelo NaHora!)
+    urlFotoCNH: '',
+    urlCRLV: '',
+    urlSeguro: '',
+    // Conta bancária (modelo NaHora!)
+    banco: '',
+    agencia: '',
+    conta: '',
+    tipoConta: '', // 'corrente', 'poupanca'
+    // Status de aprovação (modelo NaHora!)
+    status: 'pendente', // 'pendente', 'aprovado', 'rejeitado', 'suspenso'
     observacoes: '',
   });
+
+  // Tipos de veículo disponíveis (modelo NaHora!)
+  const [tiposVeiculo] = useState([
+    { id: 'bike', nome: 'Bicicleta', emoji: '🚲' },
+    { id: 'moto', nome: 'Moto', emoji: '🏍️' },
+    { id: 'car', nome: 'Carro', emoji: '🚗' },
+  ]);
+
+  // Tipos de conta bancária
+  const [tiposConta] = useState([
+    { id: 'corrente', nome: 'Corrente' },
+    { id: 'poupanca', nome: 'Poupança' },
+  ]);
 
   const handleInputChange = (field, value) => {
     setFormData(prev => ({
@@ -145,6 +172,21 @@ const CadastroMotoristaScreen = ({ navigation }) => {
             />
           </View>
 
+          <View style={{ marginBottom: 16 }}>
+            <Text style={[styles.text, { marginBottom: 8, fontWeight: '600' }]}>
+              E-mail *
+            </Text>
+            <TextInput
+              style={styles.input}
+              placeholder="motorista@exemplo.com"
+              placeholderTextColor={colors.textSecondary}
+              value={formData.email}
+              onChangeText={(value) => handleInputChange('email', value)}
+              keyboardType="email-address"
+              autoCapitalize="none"
+            />
+          </View>
+
           <View style={{ flexDirection: 'row', marginBottom: 16 }}>
             <View style={{ flex: 1, marginRight: 8 }}>
               <Text style={[styles.text, { marginBottom: 8, fontWeight: '600' }]}>
@@ -208,6 +250,35 @@ const CadastroMotoristaScreen = ({ navigation }) => {
         <View style={styles.card}>
           <Text style={styles.cardTitle}>Dados do Veículo</Text>
 
+          {/* Tipo de Veículo (Modelo NaHora!) */}
+          <View style={{ marginBottom: 16 }}>
+            <Text style={[styles.text, { marginBottom: 8, fontWeight: '600' }]}>
+              Tipo de Veículo *
+            </Text>
+            <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
+              {tiposVeiculo.map((tipo) => (
+                <TouchableOpacity
+                  key={tipo.id}
+                  style={[
+                    styles.button,
+                    formData.tipoVeiculo === tipo.id ? {} : styles.buttonSecondary,
+                    { marginRight: 8, marginBottom: 8, paddingHorizontal: 16 }
+                  ]}
+                  onPress={() => handleInputChange('tipoVeiculo', tipo.id)}
+                >
+                  <Text
+                    style={[
+                      formData.tipoVeiculo === tipo.id ? styles.buttonText : styles.buttonSecondaryText,
+                      { fontSize: 14 }
+                    ]}
+                  >
+                    {tipo.emoji} {tipo.nome}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+          </View>
+
           <View style={{ marginBottom: 16 }}>
             <Text style={[styles.text, { marginBottom: 8, fontWeight: '600' }]}>
               Modelo/Marca *
@@ -262,6 +333,167 @@ const CadastroMotoristaScreen = ({ navigation }) => {
               value={formData.cor}
               onChangeText={(value) => handleInputChange('cor', value)}
             />
+          </View>
+        </View>
+
+        {/* Documentos (Modelo NaHora!) */}
+        <View style={styles.card}>
+          <Text style={styles.cardTitle}>📄 Documentos</Text>
+          <Text style={[styles.textSecondary, { fontSize: 12, marginBottom: 16 }]}>
+            URLs ou referências dos documentos obrigatórios
+          </Text>
+
+          <View style={{ marginBottom: 16 }}>
+            <Text style={[styles.text, { marginBottom: 8, fontWeight: '600' }]}>
+              Foto da CNH
+            </Text>
+            <TextInput
+              style={styles.input}
+              placeholder="URL da foto da CNH"
+              placeholderTextColor={colors.textSecondary}
+              value={formData.urlFotoCNH}
+              onChangeText={(value) => handleInputChange('urlFotoCNH', value)}
+            />
+          </View>
+
+          <View style={{ marginBottom: 16 }}>
+            <Text style={[styles.text, { marginBottom: 8, fontWeight: '600' }]}>
+              CRLV (Certificado do Veículo)
+            </Text>
+            <TextInput
+              style={styles.input}
+              placeholder="URL do CRLV"
+              placeholderTextColor={colors.textSecondary}
+              value={formData.urlCRLV}
+              onChangeText={(value) => handleInputChange('urlCRLV', value)}
+            />
+          </View>
+
+          <View style={{ marginBottom: 16 }}>
+            <Text style={[styles.text, { marginBottom: 8, fontWeight: '600' }]}>
+              Seguro do Veículo
+            </Text>
+            <TextInput
+              style={styles.input}
+              placeholder="URL do seguro (opcional)"
+              placeholderTextColor={colors.textSecondary}
+              value={formData.urlSeguro}
+              onChangeText={(value) => handleInputChange('urlSeguro', value)}
+            />
+          </View>
+        </View>
+
+        {/* Conta Bancária (Modelo NaHora!) */}
+        <View style={styles.card}>
+          <Text style={styles.cardTitle}>🏦 Dados Bancários</Text>
+          <Text style={[styles.textSecondary, { fontSize: 12, marginBottom: 16 }]}>
+            Para recebimento dos repasses (85% do valor das entregas)
+          </Text>
+
+          <View style={{ marginBottom: 16 }}>
+            <Text style={[styles.text, { marginBottom: 8, fontWeight: '600' }]}>
+              Banco *
+            </Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Ex: 001 - Banco do Brasil"
+              placeholderTextColor={colors.textSecondary}
+              value={formData.banco}
+              onChangeText={(value) => handleInputChange('banco', value)}
+            />
+          </View>
+
+          <View style={{ flexDirection: 'row', marginBottom: 16 }}>
+            <View style={{ flex: 1, marginRight: 8 }}>
+              <Text style={[styles.text, { marginBottom: 8, fontWeight: '600' }]}>
+                Agência *
+              </Text>
+              <TextInput
+                style={styles.input}
+                placeholder="0000"
+                placeholderTextColor={colors.textSecondary}
+                value={formData.agencia}
+                onChangeText={(value) => handleInputChange('agencia', value)}
+                keyboardType="numeric"
+              />
+            </View>
+            <View style={{ flex: 1, marginLeft: 8 }}>
+              <Text style={[styles.text, { marginBottom: 8, fontWeight: '600' }]}>
+                Conta *
+              </Text>
+              <TextInput
+                style={styles.input}
+                placeholder="00000-0"
+                placeholderTextColor={colors.textSecondary}
+                value={formData.conta}
+                onChangeText={(value) => handleInputChange('conta', value)}
+              />
+            </View>
+          </View>
+
+          <View style={{ marginBottom: 16 }}>
+            <Text style={[styles.text, { marginBottom: 8, fontWeight: '600' }]}>
+              Tipo de Conta *
+            </Text>
+            <View style={{ flexDirection: 'row' }}>
+              {tiposConta.map((tipo) => (
+                <TouchableOpacity
+                  key={tipo.id}
+                  style={[
+                    styles.button,
+                    formData.tipoConta === tipo.id ? {} : styles.buttonSecondary,
+                    { marginRight: 8, paddingHorizontal: 16 }
+                  ]}
+                  onPress={() => handleInputChange('tipoConta', tipo.id)}
+                >
+                  <Text
+                    style={[
+                      formData.tipoConta === tipo.id ? styles.buttonText : styles.buttonSecondaryText,
+                      { fontSize: 14 }
+                    ]}
+                  >
+                    {tipo.nome}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+          </View>
+        </View>
+
+        {/* Status de Aprovação (Modelo NaHora!) */}
+        <View style={styles.card}>
+          <Text style={styles.cardTitle}>✅ Status de Aprovação</Text>
+          <Text style={[styles.textSecondary, { fontSize: 12, marginBottom: 16 }]}>
+            Motoristas novos iniciam como "Pendente" até aprovação
+          </Text>
+
+          <View style={[
+            {
+              backgroundColor: formData.status === 'pendente' ? 'rgba(255, 215, 0, 0.1)' :
+                             formData.status === 'aprovado' ? 'rgba(30, 203, 79, 0.1)' :
+                             'rgba(255, 69, 0, 0.1)',
+              borderRadius: 8,
+              padding: 12,
+              borderWidth: 1,
+              borderColor: formData.status === 'pendente' ? 'rgba(255, 215, 0, 0.3)' :
+                          formData.status === 'aprovado' ? 'rgba(30, 203, 79, 0.3)' :
+                          'rgba(255, 69, 0, 0.3)',
+            }
+          ]}>
+            <Text style={[styles.text, { fontWeight: '600', marginBottom: 8 }]}>
+              Status atual: {
+                formData.status === 'pendente' ? '🟡 Pendente' :
+                formData.status === 'aprovado' ? '🟢 Aprovado' :
+                formData.status === 'rejeitado' ? '🔴 Rejeitado' :
+                '⚠️ Suspenso'
+              }
+            </Text>
+            <Text style={[styles.textSecondary, { fontSize: 11 }]}>
+              {formData.status === 'pendente' ? 'Aguardando análise da documentação e aprovação do cadastro' :
+               formData.status === 'aprovado' ? 'Motorista aprovado e apto para realizar entregas' :
+               formData.status === 'rejeitado' ? 'Cadastro rejeitado. Entre em contato para mais informações' :
+               'Motorista temporariamente suspenso do sistema'}
+            </Text>
           </View>
         </View>
 
